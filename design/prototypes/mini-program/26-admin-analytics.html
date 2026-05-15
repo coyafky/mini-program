@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台数据统计</title>
+  <link rel="stylesheet" href="./admin-styles.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>数据统计</h1>
+        <p>围绕前台“浏览 → 加入预约单 → 选择门店 → 提交预约”的主链路，观察访问、车型专题点击、商品/套餐加入预约单、预约提交和门店转化表现，帮助迭代前台页面与运营策略。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">转化漏斗</span>
+          <span class="hero-tag">门店表现</span>
+          <span class="hero-tag">商品热度</span>
+          <span class="hero-tag">来源路径分析</span>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3>页面目标</h3>
+        <p>帮助运营判断到底是商品内容不够吸引、预约单聚合不够顺、还是门店承接效率影响了最终预约提交与到店率。</p>
+        <ul>
+          <li>区分两条路径：先选商品 / 先选门店</li>
+          <li>监控预约单中多商品组合的表现</li>
+          <li>对门店到店率和响应时长做持续跟踪</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card"><div class="stat-label">近 7 天 UV</div><div class="stat-value">18,240</div><div class="stat-note">首页与分类页合计</div></article>
+      <article class="stat-card"><div class="stat-label">加入预约单率</div><div class="stat-value">21.6%</div><div class="stat-note">浏览商品后加入预约单</div></article>
+      <article class="stat-card"><div class="stat-label">提交预约率</div><div class="stat-value">7.4%</div><div class="stat-note">从预约单到提交成功</div></article>
+      <article class="stat-card"><div class="stat-label">门店确认率</div><div class="stat-value">83.2%</div><div class="stat-note">提交后被门店确认</div></article>
+    </section>
+
+    <section class="split">
+      <div>
+        <section class="chart-card">
+          <div class="section-head">
+            <div>
+              <h2>预约趋势</h2>
+              <p>按天观察预约提交量与门店确认量。</p>
+            </div>
+          </div>
+          <div class="bars">
+            <div class="bar-group"><div class="bar" style="height: 84px;"></div><div class="bar alt" style="height: 62px;"></div><div class="bar-label">周一</div></div>
+            <div class="bar-group"><div class="bar" style="height: 102px;"></div><div class="bar alt" style="height: 80px;"></div><div class="bar-label">周二</div></div>
+            <div class="bar-group"><div class="bar" style="height: 126px;"></div><div class="bar alt" style="height: 98px;"></div><div class="bar-label">周三</div></div>
+            <div class="bar-group"><div class="bar" style="height: 146px;"></div><div class="bar alt" style="height: 114px;"></div><div class="bar-label">周四</div></div>
+            <div class="bar-group"><div class="bar" style="height: 178px;"></div><div class="bar alt" style="height: 150px;"></div><div class="bar-label">周五</div></div>
+            <div class="bar-group"><div class="bar" style="height: 164px;"></div><div class="bar alt" style="height: 132px;"></div><div class="bar-label">周六</div></div>
+            <div class="bar-group"><div class="bar" style="height: 132px;"></div><div class="bar alt" style="height: 104px;"></div><div class="bar-label">周日</div></div>
+          </div>
+          <div class="helper-text">金色：预约提交量 · 蓝色：门店确认量</div>
+        </section>
+
+        <section class="chart-card">
+          <div class="section-head">
+            <div>
+              <h2>热门门店 / 热门车型</h2>
+              <p>看清哪些门店与车型专题最容易带动预约。</p>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>排名</th>
+                <th>门店 / 车型</th>
+                <th>预约提交</th>
+                <th>确认率</th>
+                <th>平均响应时长</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>01</td><td>深圳南山店 / 问界 M9</td><td>128</td><td>91%</td><td>22 分钟</td></tr>
+              <tr><td>02</td><td>广州天河店 / 新 M7</td><td>112</td><td>87%</td><td>31 分钟</td></tr>
+              <tr><td>03</td><td>佛山顺德店 / R7</td><td>74</td><td>82%</td><td>38 分钟</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <aside>
+        <section class="chart-card">
+          <div class="section-head">
+            <div>
+              <h2>转化漏斗</h2>
+              <p>重点看“预约单”在链路中的承接效果。</p>
+            </div>
+          </div>
+          <div class="funnel">
+            <div class="funnel-step s1">首页 / 分类 / 门店访问<span>18,240 UV</span></div>
+            <div class="funnel-step s2">进入商品详情 / 套餐详情<span>6,984 用户，详情点击率 38.3%</span></div>
+            <div class="funnel-step s3">加入预约单<span>3,940 用户，支持多商品意向汇总</span></div>
+            <div class="funnel-step s4">提交预约成功<span>1,349 单，提交率 34.2%</span></div>
+          </div>
+        </section>
+
+        <section class="chart-card">
+          <div class="section-head">
+            <div>
+              <h2>来源路径占比</h2>
+              <p>验证双路径并存后的用户偏好。</p>
+            </div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>先选商品 → 再选门店</strong>
+              占提交预约的 62%，主要来自分类页、搜索结果页和商品列表页。
+            </div>
+            <div class="mini-item">
+              <strong>先选门店 → 再看商品</strong>
+              占提交预约的 38%，主要来自首页门店入口和门店列表页。
+            </div>
+            <div class="mini-item">
+              <strong>多商品预约单占比</strong>
+              占全部提交预约的 41%，说明“预约单”确实承担了购物车式意向聚合作用。
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>

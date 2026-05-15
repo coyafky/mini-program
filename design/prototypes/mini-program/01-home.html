@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>蓝辉轻改 · 首页</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .home-page { padding-bottom: calc(var(--tabbar-h) + 96px); }
+  .search-wrap { padding: 10px 16px 0; }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border-radius: 22px;
+    padding: 10px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .search-bar input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--muted);
+    outline: none;
+  }
+  .hero-banner {
+    margin: 12px 16px 0;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 22px 18px 64px;
+    color: #fff;
+    background: linear-gradient(135deg, #34271a 0%, #9d6623 48%, #d2a04f 100%);
+    position: relative;
+  }
+  .hero-banner::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    bottom: -26px;
+    width: 170px;
+    height: 170px;
+    background: radial-gradient(circle, rgba(255,255,255,0.32), transparent 60%);
+  }
+  .hero-kicker { font-size: 12px; opacity: 0.78; letter-spacing: 0.1em; }
+  .hero-title { font-size: 24px; font-weight: 700; margin: 8px 0 6px; line-height: 1.2; }
+  .hero-sub { font-size: 13px; opacity: 0.86; line-height: 1.5; max-width: 220px; }
+  .hero-car {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    font-size: 72px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25));
+  }
+  .hero-dots {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    display: flex;
+    gap: 6px;
+  }
+  .hero-dots span {
+    width: 6px; height: 6px; border-radius: 6px; background: rgba(255,255,255,0.45);
+  }
+  .hero-dots .active { width: 18px; background: #fff; }
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 14px 16px 4px;
+  }
+  .quick-item {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .quick-item:active { opacity: 0.88; }
+  .quick-icon { font-size: 24px; margin-bottom: 8px; }
+  .quick-title { font-size: 12px; font-weight: 600; }
+  .section {
+    padding: 14px 16px 0;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-head h3 { font-size: 17px; font-weight: 700; }
+  .section-head span { font-size: 12px; color: var(--muted); }
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .goods-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .goods-card:active { opacity: 0.9; }
+  .goods-cover {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    background: linear-gradient(135deg, #f7efe0, #ece5dc);
+  }
+  .goods-body { padding: 12px; }
+  .goods-title { font-size: 14px; font-weight: 600; line-height: 1.4; min-height: 40px; }
+  .goods-desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .goods-price { font-size: 18px; color: var(--accent2); font-weight: 700; margin-top: 8px; }
+  .mid-banner {
+    margin: 14px 16px 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #f0e4cf, #ead5af);
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mid-banner-icon { font-size: 38px; }
+  .mid-banner h4 { font-size: 18px; margin-bottom: 6px; }
+  .mid-banner p { font-size: 12px; color: #6c6252; line-height: 1.5; }
+  .case-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .case-strip::-webkit-scrollbar { display: none; }
+  .case-card {
+    min-width: 180px;
+    background: var(--surface);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .case-card .case-cover {
+    height: 110px;
+    background: linear-gradient(135deg, #d7dce6, #eef2f7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+  }
+  .case-card .case-body { padding: 10px 12px; }
+  .case-card .case-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .case-card .case-tag { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .store-entry {
+    margin: 14px 16px 0;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .store-entry-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(216,160,74,0.14);
+    font-size: 22px;
+  }
+  .store-entry h4 { font-size: 15px; margin-bottom: 4px; }
+  .store-entry p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .sticky-cta {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: var(--tabbar-h);
+    display: flex;
+    gap: 10px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.94);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    z-index: 9;
+  }
+  .sticky-cta button {
+    height: 42px;
+    border-radius: 21px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sticky-cta .ghost {
+    flex: 1;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: transparent;
+  }
+  .sticky-cta .main {
+    flex: 1.4;
+    border: none;
+    color: #fff;
+    background: var(--accent);
+  }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon"></div>
+    <div class="nav-title">蓝辉轻改</div>
+    <div class="nav-icon">☰</div>
+  </div>
+
+  <div class="home-page">
+    <div class="search-wrap">
+      <div class="search-bar" onclick="go('category')">
+        <span style="font-size:16px;color:var(--muted)">🔍</span>
+        <input placeholder="搜索商品、套餐、案例、门店" readonly>
+      </div>
+    </div>
+
+    <div class="hero-banner" onclick="go('store')">
+      <div class="hero-kicker">LIGHT CUSTOMIZATION</div>
+      <div class="hero-title">线上了解项目<br>线下预约到店</div>
+      <div class="hero-sub">围绕品牌展示、热门项目、精选套餐和门店预约，先帮用户快速找到适合自己的轻改装方案。</div>
+      <div class="hero-car">🚙</div>
+      <div class="hero-dots"><span class="active"></span><span></span><span></span></div>
+    </div>
+
+    <div class="quick-grid">
+      <div class="quick-item" onclick="go('category')"><div class="quick-icon">🚗</div><div class="quick-title">热门车型</div></div>
+      <div class="quick-item" onclick="go('category')"><div class="quick-icon">🎁</div><div class="quick-title">精选套餐</div></div>
+      <div class="quick-item" onclick="go('store')"><div class="quick-icon">🏪</div><div class="quick-title">附近门店</div></div>
+      <div class="quick-item" onclick="go('about')"><div class="quick-icon">✨</div><div class="quick-title">品牌介绍</div></div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h3>热门项目</h3><span onclick="go('category')">查看全部 ›</span></div>
+      <div class="two-col">
+        <div class="goods-card" onclick="go('product-detail')">
+          <div class="goods-cover">🛋️</div>
+          <div class="goods-body">
+            <div class="goods-title">问界 M9 升级权益包｜商务版</div>
+            <div class="goods-desc">座椅舒适升级、氛围系统、后排娱乐</div>
+            <div class="goods-price">¥29,999</div>
+          </div>
+        </div>
+        <div class="goods-card" onclick="go('product-detail')">
+          <div class="goods-cover">🪟</div>
+          <div class="goods-body">
+            <div class="goods-title">专用玻璃隔热膜｜安全护肤系列</div>
+            <div class="goods-desc">高清前挡 + 中隐侧后挡，适配新 M7</div>
+            <div class="goods-price">¥1,780</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mid-banner" onclick="go('category')">
+      <div class="mid-banner-icon">🎯</div>
+      <div>
+        <h4>车型专题快速找项目</h4>
+        <p>按品牌、车型、项目专题快速进入商品集合，减少用户从泛浏览到明确选择的决策成本。</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h3>精选套餐</h3><span onclick="go('category')">更多套餐 ›</span></div>
+      <div class="two-col">
+        <div class="goods-card" onclick="go('product-detail')">
+          <div class="goods-cover">🌟</div>
+          <div class="goods-body">
+            <div class="goods-title">问界新 M7 套餐｜舒适焕新</div>
+            <div class="goods-desc">全车镀膜、内饰清洁、舒适升级组合</div>
+            <div class="goods-price">¥3,999</div>
+          </div>
+        </div>
+        <div class="goods-card" onclick="go('product-detail')">
+          <div class="goods-cover">🎬</div>
+          <div class="goods-body">
+            <div class="goods-title">后排娱乐升级套餐</div>
+            <div class="goods-desc">吸顶电视、流媒体、观影场景一步到位</div>
+            <div class="goods-price">¥12,800</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h3>改装案例</h3><span onclick="go('about')">查看品牌 ›</span></div>
+      <div class="case-strip">
+        <div class="case-card" onclick="go('product-detail')">
+          <div class="case-cover">📷</div>
+          <div class="case-body">
+            <div class="case-title">问界 M9 商务出行场景升级</div>
+            <div class="case-tag">案例拆解 · 套餐权益包</div>
+          </div>
+        </div>
+        <div class="case-card" onclick="go('product-detail')">
+          <div class="case-cover">🧩</div>
+          <div class="case-body">
+            <div class="case-title">新 M7 隔热膜 + 舒适座舱组合</div>
+            <div class="case-tag">案例拆解 · 单品组合</div>
+          </div>
+        </div>
+        <div class="case-card" onclick="go('product-detail')">
+          <div class="case-cover">🏕️</div>
+          <div class="case-body">
+            <div class="case-title">户外露营专区场景化搭配</div>
+            <div class="case-tag">主题内容 · 户外专区</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="store-entry" onclick="go('store')">
+      <div class="store-entry-icon">📍</div>
+      <div style="flex:1">
+        <h4>先选门店，再看可预约项目</h4>
+        <p>根据 PRD，商品与预约都会绑定服务门店。先选择离你最近、可承接的门店，再进入门店商品页浏览。</p>
+      </div>
+      <div style="font-size:18px;color:var(--muted)">›</div>
+    </div>
+  </div>
+
+  <div class="sticky-cta">
+    <button class="ghost" onclick="go('store')">选择门店</button>
+    <button class="main" onclick="go('category')">快速找项目</button>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabbar-item active" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+</body>
+</html>

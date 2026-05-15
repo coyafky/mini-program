@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>我的</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #f5f6fb;
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+      color: #202020;
+    }
+    .hero {
+      background: linear-gradient(135deg, #d8a04a, #c97a18);
+      color: #fff;
+      padding: 28px 20px 28px;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 12px 32px rgba(201, 122, 24, 0.22);
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .hero p {
+      margin: 8px 0 0;
+      opacity: 0.92;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .profile-card,
+    .section-card {
+      background: #fff;
+      margin: 16px;
+      border-radius: 24px;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+      overflow: hidden;
+    }
+    .profile-card {
+      margin-top: -18px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffe7be, #fff5df);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: none;
+    }
+    .profile-main h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: #202020;
+    }
+    .profile-main p {
+      margin: 8px 0 0;
+      color: #8f8f9c;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 18px 18px 20px;
+    }
+    .stat {
+      background: #faf8f3;
+      border-radius: 20px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .stat-value {
+      display: block;
+      color: #d18b24;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .stat-label {
+      display: block;
+      margin-top: 6px;
+      color: #8f8f9c;
+      font-size: 13px;
+    }
+    .section-title {
+      margin: 0;
+      padding: 20px 22px 8px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #202020;
+    }
+    .menu-list {
+      padding: 6px 0 10px;
+    }
+    .menu-item {
+      width: 100%;
+      border: 0;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 22px;
+      border-top: 1px solid #f3f3f8;
+      font-size: 16px;
+      color: #2a2a33;
+    }
+    .menu-item:first-child {
+      border-top: 0;
+    }
+    .menu-item span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+    .menu-item small {
+      color: #9a9aa5;
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 7px;
+      background: #ff5d57;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .tabbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(78px + env(safe-area-inset-bottom));
+      background: #fff;
+      border-top: 1px solid #ececf4;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .tab-item {
+      border: 0;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #7e808d;
+      font-size: 12px;
+    }
+    .tab-item.active {
+      color: #d48f24;
+      font-weight: 800;
+    }
+    .tab-icon {
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1>我的</h1>
+    <p>这里承接个人资料、我的预约、客服与售后入口。预约历史统一从这里查看，预约单则放在底部主导航里承接当前意向商品。</p>
+  </section>
+
+  <section class="profile-card">
+    <div class="avatar">👤</div>
+    <div class="profile-main">
+      <h2>蓝辉车主</h2>
+      <p>绑定手机号后，可查看预约记录、售后进度和品牌服务入口。</p>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <div class="stats" id="statsGrid"></div>
+  </section>
+
+  <section class="section-card">
+    <h2 class="section-title">常用服务</h2>
+    <div class="menu-list" id="serviceMenu"></div>
+  </section>
+
+  <nav class="tabbar">
+    <button class="tab-item" type="button" onclick="go('home')"><span class="tab-icon">🏠</span><span>首页</span></button>
+    <button class="tab-item" type="button" onclick="go('category')"><span class="tab-icon">📂</span><span>分类</span></button>
+    <button class="tab-item" type="button" onclick="go('store')"><span class="tab-icon">🏪</span><span>门店</span></button>
+    <button class="tab-item" type="button" onclick="go('booking-list')"><span class="tab-icon">📋</span><span>预约单</span></button>
+    <button class="tab-item active" type="button"><span class="tab-icon">👤</span><span>我的</span></button>
+  </nav>
+
+  <script src="./router.js"></script>
+  <script>
+    function readDraftCount() {
+      try {
+        const draft = JSON.parse(sessionStorage.getItem('draftBooking') || '{}');
+        return (draft.items || []).reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+      } catch (err) {
+        return 0;
+      }
+    }
+
+    function readHistory() {
+      try {
+        return JSON.parse(sessionStorage.getItem('reservationHistory') || '[]');
+      } catch (err) {
+        return [];
+      }
+    }
+
+    const historyCount = readHistory().length;
+    const draftCount = readDraftCount();
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat">
+        <span class="stat-value">${historyCount}</span>
+        <span class="stat-label">我的预约</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">${draftCount}</span>
+        <span class="stat-label">预约单商品</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">24h</span>
+        <span class="stat-label">客服响应</span>
+      </div>
+    `;
+
+    const menu = [
+      {
+        icon: '🗂️',
+        label: '我的预约',
+        desc: historyCount ? `已提交 ${historyCount} 条预约记录` : '查看已提交预约和门店回访状态',
+        action: "go('booking-history')",
+        badge: ''
+      },
+      {
+        icon: '🧺',
+        label: '预约单',
+        desc: draftCount ? `当前已选 ${draftCount} 件商品` : '查看当前想预约的商品/套餐',
+        action: "go('booking-list')",
+        badge: draftCount ? `<span class=\"badge\">${draftCount}</span>` : ''
+      },
+      {
+        icon: '☎️',
+        label: '联系客服',
+        desc: '咨询门店服务、套餐搭配和预约问题',
+        action: "go('contact')",
+        badge: ''
+      },
+      {
+        icon: '📝',
+        label: '投诉建议',
+        desc: '提交服务反馈、改装体验与售后建议',
+        action: "go('feedback')",
+        badge: ''
+      },
+      {
+        icon: '🏢',
+        label: '关于我们',
+        desc: '查看品牌介绍、门店能力与轻改服务理念',
+        action: "go('about')",
+        badge: ''
+      }
+    ];
+
+    document.getElementById('serviceMenu').innerHTML = menu.map((item) => `
+      <button class="menu-item" type="button" onclick="${item.action}">
+        <span><span>${item.icon}</span><span>${item.label}</span></span>
+        <span>${item.badge}<small>${item.desc}</small></span>
+      </button>
+    `).join('');
+  </script>
+</body>
+</html>

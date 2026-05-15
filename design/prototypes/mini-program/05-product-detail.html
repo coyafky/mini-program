@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>商品详情</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .detail-wrap { padding-bottom: calc(var(--tabbar-h) + 98px); }
+  .detail-hero {
+    margin: 0 0 10px;
+    background: linear-gradient(135deg, #264165, #7ea5da);
+    aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; color: #fff; font-size: 88px;
+  }
+  .detail-hero .badge {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.18);
+    color: #fff; border: 1px solid rgba(255,255,255,0.36);
+    border-radius: 16px; padding: 6px 10px; font-size: 11px;
+  }
+  .hero-dots {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px;
+  }
+  .hero-dots span {
+    width: 6px; height: 6px; border-radius: 6px; background: rgba(255,255,255,0.44);
+  }
+  .hero-dots .active { width: 18px; background: #fff; }
+  .tab-strip {
+    display: flex; gap: 24px; justify-content: center;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: var(--topbar-h); z-index: 8;
+  }
+  .tab-strip span {
+    padding: 12px 0; font-size: 15px; color: var(--muted); border-bottom: 2px solid transparent;
+  }
+  .tab-strip .active { color: var(--fg); font-weight: 700; border-bottom-color: var(--accent); }
+  .card-box {
+    margin: 10px 16px 0;
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .price-box { padding: 16px; }
+  .price-box .price { font-size: 32px; color: var(--accent2); font-weight: 700; }
+  .price-box .title { font-size: 17px; font-weight: 700; line-height: 1.45; margin-top: 8px; }
+  .meta-row { display: flex; gap: 18px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; border-top: 1px solid var(--border); cursor: pointer;
+  }
+  .info-row .label { color: var(--muted); font-size: 13px; }
+  .info-row .value { flex: 1; margin-left: 12px; text-align: right; font-size: 14px; line-height: 1.45; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 16px; }
+  .chip { padding: 5px 10px; background: var(--bg); border-radius: 14px; font-size: 12px; }
+  .detail-block {
+    margin: 10px 16px 0; background: var(--surface); border-radius: 16px; overflow: hidden;
+  }
+  .detail-block h3 { font-size: 16px; padding: 16px; }
+  .detail-block .content { padding: 0 16px 16px; font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .image-stack { display: grid; gap: 10px; padding: 0 16px 16px; }
+  .image-box {
+    aspect-ratio: 16/10; border-radius: 14px; background: linear-gradient(135deg, #f4eadb, #e7d1b7);
+    display: flex; align-items: center; justify-content: center; font-size: 48px;
+  }
+  .bottom-actions {
+    position: fixed;
+    left: 0; right: 0; bottom: var(--tabbar-h);
+    background: rgba(255,255,255,0.97);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    backdrop-filter: blur(12px);
+    z-index: 9;
+  }
+  .mini-action { text-align: center; font-size: 10px; color: var(--muted); cursor: pointer; }
+  .mini-action div:first-child { font-size: 20px; margin-bottom: 2px; }
+  .cta-main, .cta-ghost {
+    height: 44px; border-radius: 22px; border: none; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .cta-ghost { flex: 1; background: #1f1f22; color: #fff; }
+  .cta-main { flex: 1; background: var(--accent); color: #fff; }
+  .store-tip {
+    margin: 10px 16px 0;
+    background: rgba(216,160,74,0.12);
+    color: #8c6528;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon" onclick="go('store-products')">‹</div>
+    <div class="nav-title">商品详情</div>
+    <div class="nav-icon">⋯</div>
+  </div>
+
+  <div class="tab-strip"><span class="active">商品</span><span>介绍</span><span>详情</span></div>
+
+  <div class="detail-wrap">
+    <div class="detail-hero">
+      🚙
+      <div class="badge">统一标准安装服务</div>
+      <div class="hero-dots"><span class="active"></span><span></span><span></span></div>
+    </div>
+
+    <div class="card-box">
+      <div class="price-box">
+        <div class="price">¥29,999.00</div>
+        <div class="title">问界M9升级权益包｜鲲鹏展翅【商务版】套餐</div>
+        <div class="meta-row"><span>库存：60 套</span><span>销量：32 套</span></div>
+      </div>
+      <div class="info-row" onclick="sessionStorage.setItem('afterStoreTarget','product-detail'); go('store')">
+        <div class="label">当前门店</div>
+        <div class="value" id="storeLabel">请先选择服务门店</div>
+        <div style="margin-left:10px;color:var(--muted)">›</div>
+      </div>
+      <div class="info-row" onclick="openSheet()">
+        <div class="label">已选规格</div>
+        <div class="value" id="specValue">请选择：套餐版本 / 颜色系</div>
+        <div style="margin-left:10px;color:var(--muted)">›</div>
+      </div>
+      <div style="padding:14px 16px 6px;font-size:13px;color:var(--muted)">适配车型</div>
+      <div class="chips">
+        <div class="chip">问界 M9</div>
+        <div class="chip">26 款 M7</div>
+        <div class="chip">问界 M8</div>
+        <div class="chip">问界 M7</div>
+      </div>
+    </div>
+
+    <div class="store-tip" id="storeTip">你也可以先看商品详情，再在预约前选择门店。若当前未选门店，点击底部按钮会先引导去选择服务门店。</div>
+
+    <div class="detail-block">
+      <h3>产品介绍</h3>
+      <div class="content">该套餐面向高端商务出行场景，整合座椅舒适升级、氛围灯、后排娱乐、储物收纳等多个项目，帮助用户从“单品选择”进入“整套权益包”的轻改装方案。</div>
+      <div class="image-stack">
+        <div class="image-box">🛋️</div>
+        <div class="image-box">✨</div>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <h3>套餐包含</h3>
+      <div class="content">1. 座椅舒适升级与软包细节处理<br>2. 氛围灯与门板发光饰条<br>3. 后排娱乐屏 / 吸顶电视二选一<br>4. 多项定制化收纳与门槛升级<br>5. 统一标准安装与到店施工服务</div>
+    </div>
+
+    <div class="detail-block">
+      <h3>服务说明</h3>
+      <div class="content">该项目为预约到店型服务。提交预约后，总部或门店会联系用户确认车型、门店、施工时段与具体版本，随后安排到店服务。详情页中的“加入预约单”“门店预约”都将进入预约提交流程，而不是直接支付。</div>
+    </div>
+  </div>
+
+  <div class="bottom-actions">
+    <div class="mini-action" onclick="go('home')"><div>🏠</div><div>首页</div></div>
+    <div class="mini-action" onclick="toggleFav()"><div id="favIcon">♡</div><div>收藏</div></div>
+    <div class="mini-action" onclick="go('booking-list')"><div>📋</div><div>预约单</div></div>
+    <button class="cta-ghost" id="ghostCta" onclick="handleAdd()">加入预约单</button>
+    <button class="cta-main" id="mainCta" onclick="handleBook()">选择门店后预约</button>
+  </div>
+
+  <div class="bottom-sheet-overlay" id="specSheet">
+    <div class="bottom-sheet">
+      <div class="bs-handle"></div>
+      <div class="bs-title">选择规格</div>
+      <div style="padding: 0 16px 12px; display:flex; gap:12px; align-items:center; border-bottom:1px solid var(--border);">
+        <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#f7f0e4,#eadac3);display:flex;align-items:center;justify-content:center;font-size:34px">🚙</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;line-height:1.45">问界M9升级权益包｜鲲鹏展翅【商务版】</div>
+          <div style="margin-top:4px;font-size:13px;color:var(--accent2);font-weight:700">¥29,999.00</div>
+          <div style="margin-top:2px;font-size:12px;color:var(--muted)">库存：60</div>
+        </div>
+      </div>
+      <div class="sku-group">
+        <div class="sku-label">套餐版本</div>
+        <div class="sku-options">
+          <div class="sku-opt selected" onclick="selectSku(this)">商务版</div>
+          <div class="sku-opt" onclick="selectSku(this)">户外版</div>
+          <div class="sku-opt" onclick="selectSku(this)">远征版</div>
+        </div>
+      </div>
+      <div class="sku-group">
+        <div class="sku-label">颜色系</div>
+        <div class="sku-options">
+          <div class="sku-opt selected" onclick="selectSku(this)">原车色系</div>
+          <div class="sku-opt" onclick="selectSku(this)">马卡龙蓝</div>
+          <div class="sku-opt" onclick="selectSku(this)">爱马仕橙</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;padding:12px 16px 18px;">
+        <button class="btn-secondary" style="flex:1" onclick="closeSheet()">取消</button>
+        <button class="btn-primary" style="flex:1" onclick="confirmSku()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+
+<script>
+const selectedStore = getSelectedStore();
+const hasStore = !!selectedStore;
+if (selectedStore) {
+  document.getElementById('storeLabel').textContent = `${selectedStore.name} · 距您${selectedStore.distance}`;
+  document.getElementById('storeTip').textContent = '当前商品已绑定服务门店，你可以继续选择规格并加入预约单，之后进入预约提交页。';
+  document.getElementById('mainCta').textContent = '门店预约';
+}
+let specs = ['商务版', '原车色系'];
+
+function openSheet() {
+  document.getElementById('specSheet').classList.add('show');
+}
+function closeSheet() {
+  document.getElementById('specSheet').classList.remove('show');
+}
+function selectSku(el) {
+  el.parentElement.querySelectorAll('.sku-opt').forEach(item => item.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmSku() {
+  specs = Array.from(document.querySelectorAll('.sku-group .sku-opt.selected')).map(item => item.textContent.trim());
+  document.getElementById('specValue').textContent = specs.join(' / ');
+  closeSheet();
+}
+function persistDraft() {
+  const updated = addBookingItem({
+    name: '问界M9升级权益包｜鲲鹏展翅【商务版】套餐',
+    price: '¥29,999.00',
+    spec: specs.join(' / '),
+    quantity: 1,
+    icon: '🚙'
+  });
+  updated.storeName = (selectedStore && selectedStore.name) || '';
+  setDraftBooking(updated);
+}
+function handleAdd() {
+  if (!hasStore) {
+    sessionStorage.setItem('afterStoreTarget', 'product-detail');
+    document.getElementById('toast').textContent = '请先选择服务门店';
+    document.getElementById('toast').classList.add('show');
+    setTimeout(() => {
+      document.getElementById('toast').classList.remove('show');
+      go('store');
+    }, 800);
+    return;
+  }
+  persistDraft();
+  document.getElementById('toast').textContent = '已加入预约单';
+  document.getElementById('toast').classList.add('show');
+  setTimeout(() => document.getElementById('toast').classList.remove('show'), 1500);
+}
+function handleBook() {
+  if (!hasStore) {
+    sessionStorage.setItem('afterStoreTarget', 'product-detail');
+    go('store');
+    return;
+  }
+  persistDraft();
+  go('booking-submit');
+}
+function toggleFav() {
+  const icon = document.getElementById('favIcon');
+  icon.textContent = icon.textContent === '♡' ? '♥' : '♡';
+}
+document.getElementById('specSheet').addEventListener('click', function(e) {
+  if (e.target === this) closeSheet();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>预约详情</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .detail-card { margin: 12px 16px 0; background: var(--surface); border-radius: 16px; overflow: hidden; }
+  .status-bar { padding: 16px; background: rgba(216,160,74,0.12); }
+  .status-bar .status { font-size: 18px; font-weight: 700; color: var(--accent2); }
+  .status-bar .sub { margin-top: 4px; font-size: 12px; color: #8c6a31; }
+  .row { display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .row:last-child { border-bottom: none; }
+  .row .label { width: 84px; color: var(--muted); flex-shrink: 0; }
+  .timeline { padding: 14px 16px 16px; }
+  .item-list { padding: 0 16px 10px; }
+  .item-row { padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 13px; line-height: 1.7; }
+  .item-row:last-child { border-bottom: none; }
+  .timeline-item { display: flex; gap: 10px; margin-bottom: 12px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
+  .tl-title { font-size: 14px; font-weight: 600; }
+  .tl-sub { margin-top: 3px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .actions { display: flex; gap: 10px; padding: 16px; }
+  .actions button { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon" onclick="go('booking-history')">‹</div>
+    <div class="nav-title">预约详情</div>
+    <div class="nav-icon"></div>
+  </div>
+  <div class="detail-card">
+    <div class="status-bar">
+      <div class="status">待处理</div>
+      <div class="sub">总部正在确认并分发门店，预计 2 小时内首次联系。</div>
+    </div>
+    <div class="row"><div class="label">预约单号</div><div id="detailNo">LH20260513</div></div>
+    <div class="row"><div class="label">预约项目</div><div id="detailItem">共 1 个项目</div></div>
+    <div class="row"><div class="label">门店</div><div id="detailStore">蓝辉轻改（深圳南山店）</div></div>
+    <div class="row"><div class="label">到店时间</div><div id="detailTime">2026-05-13 · 上午</div></div>
+    <div class="row"><div class="label">车型</div><div id="detailCar">问界M9 2024款</div></div>
+    <div class="item-list" id="detailItems"></div>
+  </div>
+  <div class="detail-card">
+    <div style="padding:16px 16px 0;font-size:16px;font-weight:700">处理进度</div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="dot"></div><div><div class="tl-title">预约已提交</div><div class="tl-sub">系统已生成预约单号并进入总部待处理队列。</div></div></div>
+      <div class="timeline-item"><div class="dot" style="background:#d7d7db"></div><div><div class="tl-title">总部待联系</div><div class="tl-sub">客服将确认车型、规格、到店时间和门店安排。</div></div></div>
+      <div class="timeline-item"><div class="dot" style="background:#d7d7db"></div><div><div class="tl-title">门店确认到店</div><div class="tl-sub">门店确认档期后，状态会自动更新。</div></div></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn-secondary" onclick="go('contact')">联系客服</button>
+    <button class="btn-primary" onclick="go('store')">再选门店</button>
+  </div>
+<script>
+const draft = getLastReservation();
+if (draft) {
+  document.getElementById('detailNo').textContent = draft.bookingNo || 'LH20260513';
+  document.getElementById('detailStore').textContent = draft.storeName || '蓝辉轻改（深圳南山店）';
+  document.getElementById('detailTime').textContent = `${draft.visitDate || '2026-05-13'} · ${draft.timeSlot || '上午'}`;
+  document.getElementById('detailCar').textContent = draft.carModel || '问界M9 2024款';
+  const items = Array.isArray(draft.items) && draft.items.length ? draft.items : [{ name: draft.productName || '问界M9升级权益包｜鲲鹏展翅【商务版】套餐', spec: draft.spec || '', quantity: 1 }];
+  document.getElementById('detailItem').textContent = `共 ${items.reduce((sum, item) => sum + (item.quantity || 1), 0)} 个项目`;
+  document.getElementById('detailItems').innerHTML = items.map(item => `
+    <div class="item-row">${item.name}<br><span style="color:var(--muted)">规格：${item.spec || '标准版'} · 数量：${item.quantity || 1}</span></div>
+  `).join('');
+}
+</script>
+</body>
+</html>

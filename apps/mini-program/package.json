@@ -1,0 +1,28 @@
+{
+  "name": "lanhui-mini-program",
+  "version": "1.0.0",
+  "description": "蓝辉轻改 - 微信小程序",
+  "main": "main.js",
+  "scripts": {
+    "dev": "uni -p mp-weixin",
+    "build": "uni build -p mp-weixin",
+    "dev:h5": "uni -p h5"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "2.0.2-5000720260410001",
+    "@dcloudio/uni-mp-weixin": "2.0.2-5000720260410001",
+    "@dcloudio/uni-ui": "^1.5.12",
+    "dayjs": "^1.11.0",
+    "vue": "^3.0.0",
+    "pinia": "^2.0.0"
+  },
+  "devDependencies": {
+    "@dcloudio/uni-cli-shared": "2.0.2-5000720260410001",
+    "@dcloudio/uni-stacktracey": "2.0.2-5000720260410001",
+    "@dcloudio/uni-stat": "2.0.2-5000720260410001",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "sass": "^1.80.0",
+    "sass-loader": "^16.0.0"
+  }
+}

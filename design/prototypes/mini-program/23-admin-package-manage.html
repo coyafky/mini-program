@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台套餐管理</title>
+  <link rel="stylesheet" href="./admin-styles.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>套餐管理</h1>
+        <p>集中管理车型套餐、升级权益包和主题组合，为首页精选套餐、分类页套餐专题、商品列表页以及套餐详情页提供统一内容源。一个套餐可以由多个单品与服务项组合而成。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">车型套餐</span>
+          <span class="hero-tag">升级权益包</span>
+          <span class="hero-tag">组合商品</span>
+          <span class="hero-tag">专题运营</span>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3>页面目标</h3>
+        <p>帮助运营团队完成套餐结构设计、价格配置、适配车型绑定、页面主视觉上传和套餐上下架。</p>
+        <ul>
+          <li>支持查看套餐包含的商品/服务清单</li>
+          <li>支持配置套餐主图、卖点、标签和 CTA</li>
+          <li>支持判断哪些门店可承接该套餐</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card"><div class="stat-label">套餐总数</div><div class="stat-value">186</div><div class="stat-note">含权益包与场景套餐</div></article>
+      <article class="stat-card"><div class="stat-label">已上架套餐</div><div class="stat-value">128</div><div class="stat-note">当前前台可选</div></article>
+      <article class="stat-card"><div class="stat-label">问界车系套餐</div><div class="stat-value">74</div><div class="stat-note">占比最高</div></article>
+      <article class="stat-card"><div class="stat-label">近 7 天热门</div><div class="stat-value">12</div><div class="stat-note">加入预约单表现最好</div></article>
+    </section>
+
+    <section class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>套餐筛选</h2>
+          <p>按车型、场景、运营标签、门店覆盖和上架状态筛选套餐。</p>
+        </div>
+        <div class="toolbar">
+          <input type="text" value="搜索套餐名称 / 权益包 / 卖点关键词" />
+          <select><option>全部车系</option><option>问界</option><option>智界</option><option>享界</option></select>
+          <select><option>全部场景</option><option>商务版</option><option>家庭版</option><option>户外版</option></select>
+          <select><option>全部状态</option><option>上架</option><option>草稿</option><option>停用</option></select>
+          <button class="action-primary">新增套餐</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="split">
+      <div class="table-card">
+        <div class="card-head">
+          <h2>套餐列表</h2>
+          <span class="helper-text">套餐应与商品库联动，变更单品价格时可提示是否同步套餐</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>套餐名称</th>
+              <th>适配车型</th>
+              <th>包含项目</th>
+              <th>参考价</th>
+              <th>门店覆盖</th>
+              <th>运营标签</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">问界 M9 升级权益包｜鲲鹏展翅（商务版）</span><span class="table-sub">套餐详情页已配置海报、亮点和加入预约单逻辑</span></div></td>
+              <td>M9</td>
+              <td>18 项商品 / 服务</td>
+              <td>¥29,999</td>
+              <td>42 家门店</td>
+              <td><span class="badge info">首页精选套餐</span></td>
+              <td><span class="badge success">上架</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">组合清单</a><a href="#">门店覆盖</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">26 款问界新 M7 升级权益包｜扶摇直上 10 件套</span><span class="table-sub">适合分类页车型专题导流</span></div></td>
+              <td>新 M7</td>
+              <td>10 项商品 / 服务</td>
+              <td>¥13,888</td>
+              <td>64 家门店</td>
+              <td><span class="badge">车型专题</span></td>
+              <td><span class="badge success">上架</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">主视觉</a><a href="#">详情</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">R7 户外轻露营专区组合</span><span class="table-sub">含户外桌板、充电枪、防护项</span></div></td>
+              <td>R7</td>
+              <td>6 项商品 / 服务</td>
+              <td>¥9,999</td>
+              <td>18 家门店</td>
+              <td><span class="badge">主题专区</span></td>
+              <td><span class="badge info">草稿</span></td>
+              <td><div class="op-links"><a href="#">补海报</a><a href="#">组合清单</a><a href="#">上架</a></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="aside-card">
+        <h3>当前套餐预览</h3>
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>主卖点结构</strong>
+            车型标题 + 套餐主题名 + 适用场景 + 门店可预约说明。
+          </div>
+          <div class="mini-item">
+            <strong>组合清单</strong>
+            座舱舒适升级、氛围系统、后排娱乐、玻璃膜、防护项、门店安装服务。
+          </div>
+          <div class="mini-item">
+            <strong>风险提醒</strong>
+            若套餐中任一商品下架，应提示重新核对套餐有效性与前台展示状态。
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>

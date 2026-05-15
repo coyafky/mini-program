@@ -1,0 +1,114 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "蓝辉轻改"
+      }
+    },
+    {
+      "path": "pages/category/index",
+      "style": {
+        "navigationBarTitleText": "商品分类"
+      }
+    },
+    {
+      "path": "pages/store/index",
+      "style": {
+        "navigationBarTitleText": "选择门店"
+      }
+    },
+    {
+      "path": "pages/store/products",
+      "style": {
+        "navigationBarTitleText": "门店商品"
+      }
+    },
+    {
+      "path": "pages/product/detail",
+      "style": {
+        "navigationBarTitleText": "商品详情"
+      }
+    },
+    {
+      "path": "pages/booking/cart",
+      "style": {
+        "navigationBarTitleText": "预约单"
+      }
+    },
+    {
+      "path": "pages/booking/submit",
+      "style": {
+        "navigationBarTitleText": "提交预约"
+      }
+    },
+    {
+      "path": "pages/booking/success",
+      "style": {
+        "navigationBarTitleText": "预约成功"
+      }
+    },
+    {
+      "path": "pages/booking/history",
+      "style": {
+        "navigationBarTitleText": "我的预约"
+      }
+    },
+    {
+      "path": "pages/booking/detail",
+      "style": {
+        "navigationBarTitleText": "预约详情"
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "蓝辉轻改",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F2F2F7"
+  },
+  "tabBar": {
+    "color": "#8E8E93",
+    "selectedColor": "#D8A04A",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/category/index",
+        "iconPath": "static/tabbar/category.png",
+        "selectedIconPath": "static/tabbar/category-active.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/store/index",
+        "iconPath": "static/tabbar/store.png",
+        "selectedIconPath": "static/tabbar/store-active.png",
+        "text": "门店"
+      },
+      {
+        "pagePath": "pages/booking/cart",
+        "iconPath": "static/tabbar/booking.png",
+        "selectedIconPath": "static/tabbar/booking-active.png",
+        "text": "预约单"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "iconPath": "static/tabbar/mine.png",
+        "selectedIconPath": "static/tabbar/mine-active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

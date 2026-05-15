@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台商品管理</title>
+  <link rel="stylesheet" href="./admin-styles.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>商品管理</h1>
+        <p>统一维护单品与服务项，包括分类、品牌、适配车型、价格、库存、上下架状态，以及与门店商品池的联动关系。这里的数据会被分类页、商品列表页、商品详情页直接消费。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">分类体系</span>
+          <span class="hero-tag">适配车型</span>
+          <span class="hero-tag">门店覆盖</span>
+          <span class="hero-tag">上下架状态</span>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3>页面目标</h3>
+        <p>让运营人员可以快速补齐商品资料、筛选适配车型、调整价格与库存，并判断是否允许加入预约单。</p>
+        <ul>
+          <li>支持多级分类与车型专题双维度管理</li>
+          <li>支持商品主图、卖点、规格与门店可售状态配置</li>
+          <li>支持查看商品被哪些套餐、首页模块复用</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card"><div class="stat-label">商品总数</div><div class="stat-value">1,286</div><div class="stat-note">包含单品、服务项、配件</div></article>
+      <article class="stat-card"><div class="stat-label">上架商品</div><div class="stat-value">968</div><div class="stat-note">当前前台可见</div></article>
+      <article class="stat-card"><div class="stat-label">待完善资料</div><div class="stat-value">84</div><div class="stat-note">缺主图或缺详情描述</div></article>
+      <article class="stat-card"><div class="stat-label">热销 TOP 商品</div><div class="stat-value">32</div><div class="stat-note">近 7 天加入预约单最高</div></article>
+    </section>
+
+    <section class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>商品筛选</h2>
+          <p>围绕商品名称、品牌、一级/二级分类、适配车型、状态与门店覆盖进行筛选。</p>
+        </div>
+        <div class="toolbar">
+          <input type="text" value="搜索商品名称 / SKU / 卖点关键词" />
+          <select><option>全部品牌</option><option>承美车居</option><option>蓝辉精选</option></select>
+          <select><option>一级分类</option><option>玻璃膜</option><option>座舱舒适</option><option>户外专区</option></select>
+          <select><option>适配车型</option><option>新 M7</option><option>M9</option><option>R7</option></select>
+          <select><option>商品状态</option><option>上架</option><option>草稿</option><option>停用</option></select>
+          <button class="action-primary">新增商品</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="split">
+      <div class="table-card">
+        <div class="card-head">
+          <h2>商品列表</h2>
+          <span class="helper-text">建议与门店商品池联动显示，避免“前台可见但门店不可承接”</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>商品信息</th>
+              <th>分类 / 车型</th>
+              <th>参考价</th>
+              <th>库存</th>
+              <th>门店覆盖</th>
+              <th>首页引用</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">专用玻璃隔热膜｜安全护肤系列</span><span class="table-sub">SKU：GLASS-M7-001 · 前台详情页已配置规格弹层</span></div></td>
+              <td>玻璃膜 / 新 M7、M9</td>
+              <td>¥1,780</td>
+              <td>现货 478</td>
+              <td>86 家门店</td>
+              <td><span class="badge info">首页热门项目</span></td>
+              <td><span class="badge success">上架</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">规格</a><a href="#">门店覆盖</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">隐形定制座垫</span><span class="table-sub">SKU：SEAT-M9-018 · 支持颜色/材质二级规格</span></div></td>
+              <td>座舱舒适 / M9</td>
+              <td>¥1,980</td>
+              <td>预售</td>
+              <td>52 家门店</td>
+              <td><span class="badge">车型专题</span></td>
+              <td><span class="badge success">上架</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">详情</a><a href="#">套装关联</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">吸顶电视 15.6 寸</span><span class="table-sub">SKU：TV-M8-032 · 适配后排娱乐套餐</span></div></td>
+              <td>后排娱乐 / M8、新 M7</td>
+              <td>¥4,980</td>
+              <td>现货 37</td>
+              <td>31 家门店</td>
+              <td><span class="badge info">精选套餐</span></td>
+              <td><span class="badge success">上架</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">库存</a><a href="#">门店覆盖</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">DSP 功放升级套件</span><span class="table-sub">SKU：DSP-UNIV-007 · 户外专区通用项</span></div></td>
+              <td>音响改装 / 通用项目</td>
+              <td>¥3,280</td>
+              <td>现货 94</td>
+              <td>24 家门店</td>
+              <td><span class="badge">专题位</span></td>
+              <td><span class="badge info">草稿</span></td>
+              <td><div class="op-links"><a href="#">补详情</a><a href="#">门店覆盖</a><a href="#">上架</a></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="aside-card">
+        <h3>商品资料检查</h3>
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>必填字段</strong>
+            商品名称、主图、一级/二级分类、适配车型、价格、预约说明、门店覆盖范围。
+          </div>
+          <div class="mini-item">
+            <strong>规格与交互</strong>
+            需要在详情页展示规格弹层的商品，应补齐规格名、价格差异、库存和默认选中项。
+          </div>
+          <div class="mini-item">
+            <strong>运营提示</strong>
+            被首页/套餐引用的商品下架前，需要二次确认并提示替换影响范围。
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>

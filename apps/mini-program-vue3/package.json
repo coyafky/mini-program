@@ -1,0 +1,40 @@
+{
+  "name": "lanhui-mini-program-vue3",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "蓝辉轻改 - Vue 3 小程序重写版本",
+  "scripts": {
+    "dev:h5": "uni",
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:h5": "uni build",
+    "build:mp-weixin": "uni build -p mp-weixin",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-4080720251210001",
+    "@dcloudio/uni-components": "3.0.0-4080720251210001",
+    "@dcloudio/uni-h5": "3.0.0-4080720251210001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-4080720251210001",
+    "axios": "^1.8.4",
+    "dayjs": "^1.11.20",
+    "pinia": "^2.3.1",
+    "vue": "3.4.21"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "^3.4.28",
+    "@dcloudio/uni-cli-shared": "3.0.0-4080720251210001",
+    "@dcloudio/uni-stacktracey": "3.0.0-4080720251210001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-4080720251210001",
+    "@types/node": "^22.19.19",
+    "sass": "^1.99.0",
+    "typescript": "^5.9.3",
+    "vite": "5.2.8",
+    "vue-tsc": "^2.2.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "vue": "3.4.21"
+    }
+  }
+}

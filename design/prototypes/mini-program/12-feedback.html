@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>投诉建议</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .card { margin-top: 12px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 12px; }
+  .chips span { padding: 7px 12px; border-radius: 16px; background: var(--bg); font-size: 13px; cursor: pointer; }
+  .chips .active { background: rgba(216,160,74,0.14); color: var(--accent2); }
+</style>
+</head>
+<body>
+  <div class="topnav"><div class="nav-icon" onclick="go('profile')">‹</div><div class="nav-title">投诉建议</div><div class="nav-icon"></div></div>
+  <div class="card">
+    <div class="card-pad">
+      <div class="form-field">
+        <div class="form-label">反馈类型</div>
+        <div class="chips">
+          <span class="active">服务建议</span>
+          <span>门店投诉</span>
+          <span>预约问题</span>
+          <span>其他反馈</span>
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="form-label"><span class="required">*</span> 姓名</div>
+        <input class="input-field" placeholder="请输入姓名">
+      </div>
+      <div class="form-field">
+        <div class="form-label"><span class="required">*</span> 手机号</div>
+        <input class="input-field" placeholder="请输入手机号">
+      </div>
+      <div class="form-field">
+        <div class="form-label"><span class="required">*</span> 反馈内容</div>
+        <textarea class="input-field" rows="6" style="height:120px;resize:none" placeholder="请描述问题门店、预约单号或具体建议"></textarea>
+      </div>
+      <div class="form-field">
+        <div class="form-label">图片附件（选填）</div>
+        <div class="input-field" style="display:flex;align-items:center;justify-content:center;height:88px;color:var(--muted)">点击上传图片凭证</div>
+      </div>
+      <button class="btn-primary">提交反馈</button>
+    </div>
+  </div>
+</body>
+</html>

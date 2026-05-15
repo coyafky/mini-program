@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台首页配置</title>
+  <link rel="stylesheet" href="./admin-styles.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>首页配置</h1>
+        <p>按照前台首页结构，对 Banner、快捷入口、热门项目、精选套餐、案例专题和门店导流模块进行统一配置。目标是让运营团队能快速替换页面内容，而不影响预约主链路。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">Banner 轮播</span>
+          <span class="hero-tag">快捷入口</span>
+          <span class="hero-tag">热门项目</span>
+          <span class="hero-tag">门店导流</span>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3>页面目标</h3>
+        <p>让运营人员能够低成本配置前台首页内容节奏，并保持“快速找项目 / 选择门店 / 加入预约单”路径顺畅。</p>
+        <ul>
+          <li>模块可独立启停与排序</li>
+          <li>支持绑定商品、套餐、案例和专题页</li>
+          <li>支持右侧手机预览，降低配置偏差</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="split">
+      <div>
+        <section class="config-card">
+          <div class="section-head">
+            <div>
+              <h2>模块配置清单</h2>
+              <p>按照前台首页实际展示顺序组织模块。</p>
+            </div>
+            <div class="toolbar">
+              <button class="action-ghost">保存草稿</button>
+              <button class="action-primary">发布到首页</button>
+            </div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>01 Banner 主视觉</strong>
+              当前主题：线上了解项目，线下预约到店。
+              <div class="helper-text">绑定 3 张轮播图，第一张主推品牌展示，第二张主推新 M7 套餐，第三张主推门店服务能力。</div>
+            </div>
+            <div class="mini-item">
+              <strong>02 快捷入口</strong>
+              热门车型、精选套餐、附近门店、品牌介绍。
+              <div class="helper-text">支持图标、文案、跳转目标配置。</div>
+            </div>
+            <div class="mini-item">
+              <strong>03 热门项目</strong>
+              已绑定 8 个单品，来自玻璃膜、座舱舒适、后排娱乐。
+              <div class="helper-text">支持手动排序与按车型专题推荐。</div>
+            </div>
+            <div class="mini-item">
+              <strong>04 精选套餐</strong>
+              已绑定 4 个套餐，首页首屏露出 2 个。
+              <div class="helper-text">建议绑定高转化车型权益包。</div>
+            </div>
+            <div class="mini-item">
+              <strong>05 改装案例 / 品牌专区</strong>
+              已配置 3 个案例卡片。
+              <div class="helper-text">用于承接内容浏览，提升用户决策信心。</div>
+            </div>
+            <div class="mini-item">
+              <strong>06 门店导流模块</strong>
+              文案：先选门店，再看可预约项目。
+              <div class="helper-text">支持一键跳转门店列表或带定位推荐。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-head">
+            <div>
+              <h2>当前选中模块编辑</h2>
+              <p>以 Banner 模块为例，展示可编辑字段。</p>
+            </div>
+          </div>
+          <div class="fields-grid">
+            <div class="field">
+              <label>模块标题</label>
+              <input type="text" value="线上了解项目，线下预约到店" />
+            </div>
+            <div class="field">
+              <label>模块状态</label>
+              <select><option>启用</option><option>停用</option></select>
+            </div>
+            <div class="field">
+              <label>跳转类型</label>
+              <select><option>商品列表页</option><option>套餐详情页</option><option>门店列表页</option></select>
+            </div>
+            <div class="field">
+              <label>排序权重</label>
+              <input type="text" value="100" />
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label>模块描述</label>
+              <textarea>围绕品牌展示、热门项目、精选套餐和门店预约，先帮助用户快速找到适合自己的轻改装方案。</textarea>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="preview-card">
+        <div class="section-head">
+          <div>
+            <h2>前台手机预览</h2>
+            <p>让运营配置时实时感知首页结构。</p>
+          </div>
+        </div>
+        <div class="phone-preview">
+          <div class="phone-header">蓝辉轻改</div>
+          <div class="phone-banner">
+            <h4>线上了解项目<br />线下预约到店</h4>
+            <p>围绕品牌展示、热门项目、精选套餐和门店预约，先帮用户快速找到适合自己的轻改装方案。</p>
+          </div>
+          <div class="phone-nav">
+            <div>热门车型</div>
+            <div>精选套餐</div>
+            <div>附近门店</div>
+            <div>品牌介绍</div>
+          </div>
+          <div class="phone-cards">
+            <div class="phone-card">🪟<strong>热门项目</strong></div>
+            <div class="phone-card">🎁<strong>精选套餐</strong></div>
+            <div class="phone-card">📷<strong>改装案例</strong></div>
+            <div class="phone-card">📍<strong>选择门店</strong></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+:root {
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --line: #e8ebf4;
+  --line-strong: #dfe3ee;
+  --text: #1f2430;
+  --muted: #7e8699;
+  --accent: #d8a04a;
+  --accent-strong: #c97a18;
+  --accent-soft: #fbf2e2;
+}
+
+// 侧边栏
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #1a1d29;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu {
+  padding: 12px 0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  gap: 10px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-item.active {
+  color: var(--accent);
+  background: rgba(216, 160, 74, 0.1);
+  border-right: 3px solid var(--accent);
+}
+
+// 主内容区
+.main-content {
+  margin-left: 240px;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.page-header {
+  background: #fff;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.page-body {
+  padding: 24px 28px;
+}
+
+// 卡片
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--line);
+}
+
+// 统计卡片
+.stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--line);
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stat-value {
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+// 操作按钮
+.action-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action-primary:hover {
+  opacity: 0.9;
+}

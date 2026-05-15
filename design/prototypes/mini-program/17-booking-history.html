@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>我的预约</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #f5f6fb;
+      color: #202020;
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #ececf4;
+      padding: 18px;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .back-btn,
+    .right-link {
+      border: 0;
+      background: none;
+      color: #8f8f9c;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .tips {
+      margin: 16px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 18px;
+      color: #8f8f9c;
+      line-height: 1.7;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+    }
+    .list {
+      padding: 0 16px;
+    }
+    .record {
+      width: 100%;
+      border: 0;
+      background: #fff;
+      border-radius: 24px;
+      padding: 18px 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+      text-align: left;
+    }
+    .record-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .record-no {
+      font-size: 15px;
+      font-weight: 800;
+      color: #202020;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #f7efe4;
+      color: #c98927;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .record-meta {
+      color: #8f8f9c;
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .record-items {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .record-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #faf8f3;
+      color: #34343d;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .record-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #8f8f9c;
+      font-size: 13px;
+    }
+    .record-price {
+      color: #cd861e;
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .empty {
+      background: #fff;
+      margin: 16px;
+      border-radius: 24px;
+      padding: 52px 24px 42px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+    }
+    .empty .icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+    .empty h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+    .empty p {
+      margin: 0 auto 22px;
+      color: #8f8f9c;
+      line-height: 1.7;
+      max-width: 290px;
+    }
+    .empty button {
+      border: 0;
+      border-radius: 999px;
+      height: 52px;
+      padding: 0 28px;
+      background: linear-gradient(135deg, #d8a04a, #c97a18);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-row">
+      <button class="back-btn" type="button" onclick="go('profile')">返回我的</button>
+      <h1 class="title">我的预约</h1>
+      <button class="right-link" type="button" onclick="go('booking-list')">去看预约单</button>
+    </div>
+  </header>
+
+  <section class="tips">
+    这里展示已经提交成功的预约记录。还在挑选中的商品/套餐，请继续放在底部主导航的“预约单”里统一整理。
+  </section>
+
+  <main id="historyRoot"></main>
+
+  <script src="./router.js"></script>
+  <script>
+    function readHistory() {
+      try {
+        return JSON.parse(sessionStorage.getItem('reservationHistory') || '[]');
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function writeLastReservation(record) {
+      sessionStorage.setItem('lastReservation', JSON.stringify(record));
+    }
+
+    function normalizeItem(item) {
+      return {
+        title: item.title || item.name || item.productName || '轻改装项目',
+        spec: item.spec || item.variant || item.option || '标准版',
+        quantity: Number(item.quantity || 1),
+        price: Number(item.price || item.amount || 0)
+      };
+    }
+
+    function openDetail(index) {
+      const history = readHistory();
+      if (!history[index]) return;
+      writeLastReservation(history[index]);
+      go('booking-detail');
+    }
+
+    function formatDate(value) {
+      if (!value) return '待确认';
+      return value.replace('T', ' ').slice(0, 16);
+    }
+
+    function render() {
+      const history = readHistory();
+      const root = document.getElementById('historyRoot');
+
+      if (!history.length) {
+        root.innerHTML = `
+          <section class="empty">
+            <div class="icon">🗂️</div>
+            <h2>还没有提交过预约</h2>
+            <p>先把感兴趣的商品加入预约单，再统一填写门店、时间和联系方式提交预约。</p>
+            <button type="button" onclick="go('category')">去挑选商品</button>
+          </section>
+        `;
+        return;
+      }
+
+      root.innerHTML = `
+        <section class="list">
+          ${history.map((record, index) => {
+            const items = (record.items || []).map(normalizeItem);
+            const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            return `
+              <button class="record" type="button" onclick="openDetail(${index})">
+                <div class="record-top">
+                  <div class="record-no">${record.bookingNo || `YUYUE-${index + 1}`}</div>
+                  <span class="status">${record.status || '待门店联系'}</span>
+                </div>
+                <div class="record-meta">
+                  提交时间：${formatDate(record.createdAt)}<br />
+                  服务门店：${record.storeName || record.store || '待门店确认'}<br />
+                  预约联系人：${record.contactName || '蓝辉车主'}
+                </div>
+                <div class="record-items">
+                  ${items.map((item) => `
+                    <div class="record-item">
+                      ${item.title}<br />
+                      ${item.spec} · ${item.quantity} 件
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="record-foot">
+                  <span>共 ${totalCount} 件商品，点击查看预约详情</span>
+                  <span class="record-price">¥${totalPrice.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+              </button>
+            `;
+          }).join('')}
+        </section>
+      `;
+    }
+
+    render();
+  </script>
+</body>
+</html>

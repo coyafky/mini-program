@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>商品列表</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .top-banner {
+    background: linear-gradient(135deg, #c2863e, #d8a04a);
+    padding: 10px 16px 14px;
+    color: #fff;
+  }
+  .search-box {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.94);
+    border-radius: 20px;
+    padding: 10px 14px;
+  }
+  .search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sort-pill {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .sort-pill.active { color: var(--accent2); }
+  .result-wrap {
+    padding: 12px 16px calc(var(--tabbar-h) + 24px);
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 12px;
+  }
+  .result-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .result-card:active { opacity: 0.9; }
+  .result-cover {
+    aspect-ratio: 1 / 1.08;
+    background: linear-gradient(135deg, #dfe8f7, #aac6ea);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    color: #204a7a;
+  }
+  .result-body { padding: 12px; }
+  .result-title { font-size: 14px; font-weight: 600; line-height: 1.45; min-height: 42px; }
+  .result-price { margin-top: 8px; font-size: 18px; color: var(--accent2); font-weight: 700; }
+  .result-meta {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .float-store {
+    position: fixed;
+    right: 18px;
+    bottom: calc(var(--tabbar-h) + 22px);
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 20px rgba(216,160,74,0.3);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 9;
+  }
+</style>
+</head>
+<body>
+  <div class="topnav" style="background:transparent;border-bottom:none;position:absolute;left:0;right:0;color:#fff;z-index:10">
+    <div class="nav-icon" style="color:#fff" onclick="go('category')">‹</div>
+    <div class="nav-title" style="color:#fff">商品列表</div>
+    <div class="nav-icon" style="color:#fff">☰</div>
+  </div>
+
+  <div class="top-banner">
+    <div style="height:34px"></div>
+    <div class="search-box">
+      <span style="font-size:16px;color:var(--muted)">🔍</span>
+      <input placeholder="搜索商品名称" readonly>
+      <span style="font-size:18px;color:var(--muted)">☷</span>
+    </div>
+  </div>
+
+  <div class="sort-bar">
+    <div class="sort-pill active">新M7套餐</div>
+    <div class="sort-pill">价格 ↕</div>
+    <div class="sort-pill">销量 ↕</div>
+    <div class="sort-pill">品牌 ▾</div>
+  </div>
+
+  <div class="result-wrap">
+    <div class="result-grid">
+      <div class="result-card" onclick="go('product-detail')">
+        <div class="result-cover">🚙</div>
+        <div class="result-body">
+          <div class="result-title">26款问界 M7 升级权益包｜鲲鹏展翅18件套</div>
+          <div class="result-price">¥16,888.00</div>
+          <div class="result-meta"><span>已售73套</span><span>评分 3.0</span></div>
+        </div>
+      </div>
+      <div class="result-card" onclick="go('product-detail')">
+        <div class="result-cover">🚘</div>
+        <div class="result-body">
+          <div class="result-title">26款问界 M7 升级权益包｜扶摇直上10件套</div>
+          <div class="result-price">¥13,888.00</div>
+          <div class="result-meta"><span>已售68套</span><span>评分 3.0</span></div>
+        </div>
+      </div>
+      <div class="result-card" onclick="go('product-detail')">
+        <div class="result-cover">🎁</div>
+        <div class="result-body">
+          <div class="result-title">26款问界 M7 升级权益包｜众星捧月6件套</div>
+          <div class="result-price">¥9,999.00</div>
+          <div class="result-meta"><span>已售53套</span><span>评分 4.0</span></div>
+        </div>
+      </div>
+      <div class="result-card" onclick="go('product-detail')">
+        <div class="result-cover">🪟</div>
+        <div class="result-body">
+          <div class="result-title">适配问界新M7｜专用玻璃隔热膜</div>
+          <div class="result-price">¥1,780.00</div>
+          <div class="result-meta"><span>已售47套</span><span>评分 4.6</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="float-store" onclick="go('store')">🏪</div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item active" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+</body>
+</html>

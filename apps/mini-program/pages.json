@@ -1,0 +1,58 @@
+{
+  "pages": [
+    {"path": "pages/index/index", "style": {"navigationBarTitleText": "蓝辉轻改"}},
+    {"path": "pages/category/category", "style": {"navigationBarTitleText": "商品分类"}},
+    {"path": "pages/store/store", "style": {"navigationBarTitleText": "选择门店"}},
+    {"path": "pages/store-products/store-products", "style": {"navigationBarTitleText": "门店商品"}},
+    {"path": "pages/product-detail/product-detail", "style": {"navigationBarTitleText": "商品详情"}},
+    {"path": "pages/booking-submit/booking-submit", "style": {"navigationBarTitleText": "提交预约"}},
+    {"path": "pages/booking-success/booking-success", "style": {"navigationBarTitleText": "预约成功"}},
+    {"path": "pages/booking-list/booking-list", "style": {"navigationBarTitleText": "我的预约"}},
+    {"path": "pages/booking-detail/booking-detail", "style": {"navigationBarTitleText": "预约详情"}},
+    {"path": "pages/mine/mine", "style": {"navigationBarTitleText": "个人中心"}}
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "蓝辉轻改",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F2F2F7"
+  },
+  "tabBar": {
+    "color": "#8E8E93",
+    "selectedColor": "#D8A04A",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/category/category",
+        "iconPath": "static/tabbar/category.png",
+        "selectedIconPath": "static/tabbar/category-active.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/store/store",
+        "iconPath": "static/tabbar/store.png",
+        "selectedIconPath": "static/tabbar/store-active.png",
+        "text": "门店"
+      },
+      {
+        "pagePath": "pages/booking-list/booking-list",
+        "iconPath": "static/tabbar/booking.png",
+        "selectedIconPath": "static/tabbar/booking-active.png",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "iconPath": "static/tabbar/mine.png",
+        "selectedIconPath": "static/tabbar/mine-active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

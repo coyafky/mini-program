@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>门店商品页</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .search-wrap { padding: 10px 16px 0; background: var(--surface); }
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border-radius: 20px; padding: 10px 14px;
+  }
+  .search-bar input { flex: 1; border: none; background: transparent; outline: none; font-size: 14px; color: var(--muted); }
+  .store-context {
+    background: var(--surface);
+    padding: 14px 16px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .store-top { display: flex; gap: 12px; align-items: flex-start; }
+  .store-title { font-size: 18px; font-weight: 700; line-height: 1.35; flex: 1; }
+  .store-sub { margin-top: 6px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .fulfill-switch {
+    display: flex;
+    background: var(--bg);
+    border-radius: 18px;
+    padding: 3px;
+  }
+  .fulfill-switch span {
+    min-width: 56px; text-align: center; font-size: 13px; padding: 7px 10px; border-radius: 15px;
+  }
+  .fulfill-switch .active { background: var(--accent); color: #fff; }
+  .topic-bar {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .topic-bar::-webkit-scrollbar { display: none; }
+  .topic-chip {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 18px;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .topic-chip.active { background: var(--accent); color: #fff; }
+  .catalog-layout {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    min-height: calc(100vh - 268px);
+  }
+  .catalog-left {
+    background: #f6f6f8;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  .catalog-cat {
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #4f4f56;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .catalog-cat.active {
+    background: #fff;
+    color: var(--accent);
+    font-weight: 700;
+    border-left-color: var(--accent);
+  }
+  .catalog-right {
+    background: #fff;
+    padding-bottom: calc(var(--tabbar-h) + 84px);
+  }
+  .list-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 8px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .list-top span { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .product-row {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .product-thumb {
+    width: 88px; height: 88px; border-radius: 14px;
+    background: linear-gradient(135deg, #f7f0e3, #efe4d1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; flex-shrink: 0;
+  }
+  .product-main { flex: 1; min-width: 0; }
+  .product-name { font-size: 15px; font-weight: 600; line-height: 1.4; }
+  .product-desc { margin-top: 6px; font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .product-bottom {
+    margin-top: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .product-price { font-size: 16px; font-weight: 700; color: var(--accent2); }
+  .add-btn {
+    border: none; background: rgba(216,160,74,0.14); color: var(--accent2);
+    border-radius: 16px; padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .booking-bar {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: var(--tabbar-h);
+    background: rgba(255,255,255,0.96);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    backdrop-filter: blur(10px);
+    z-index: 9;
+  }
+  .booking-meta { flex: 1; }
+  .booking-meta .label { font-size: 12px; color: var(--muted); }
+  .booking-meta .value { margin-top: 2px; font-size: 15px; font-weight: 700; }
+  .booking-btn {
+    border: none; background: var(--accent); color: #fff;
+    border-radius: 20px; padding: 10px 20px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon" onclick="go('store')">‹</div>
+    <div class="nav-title">门店商品</div>
+    <div class="nav-icon">⋯</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span style="font-size:16px;color:var(--muted)">🔍</span>
+      <input placeholder="搜索商品信息" readonly>
+    </div>
+  </div>
+
+  <div class="store-context">
+    <div class="store-top">
+      <div style="flex:1">
+        <div class="store-title" id="storeName">蓝辉轻改（深圳南山店）</div>
+        <div class="store-sub" id="storeMeta">门店距您 0.8km<br>营业时间：09:00 - 18:00</div>
+      </div>
+      <div class="fulfill-switch">
+        <span>自提</span>
+        <span class="active">配送</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-bar" id="topicBar">
+    <div class="topic-chip active">全部</div>
+    <div class="topic-chip">新M7套餐</div>
+    <div class="topic-chip">M9套餐</div>
+    <div class="topic-chip">户外专区</div>
+    <div class="topic-chip">通用项目</div>
+  </div>
+
+  <div class="catalog-layout">
+    <aside class="catalog-left" id="catNav"></aside>
+    <section class="catalog-right">
+      <div class="list-top"><div id="listTitle">问界升级</div><span>当前门店可预约内容</span></div>
+      <div id="productList"></div>
+    </section>
+  </div>
+
+  <div class="booking-bar">
+    <div class="booking-meta">
+      <div class="label">已加入预约单</div>
+      <div class="value" id="countText">0 个项目</div>
+    </div>
+    <button class="booking-btn" onclick="go('booking-submit')">去预约</button>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item active" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+
+<script>
+const selectedStore = getSelectedStore() || { name: '蓝辉轻改（深圳南山店）', distance: '0.8km', hours: '09:00 - 18:00' };
+document.getElementById('storeName').textContent = selectedStore.name;
+document.getElementById('storeMeta').innerHTML = `门店距您 ${selectedStore.distance}<br>营业时间：${selectedStore.hours}`;
+
+const catalogData = {
+  '问界升级': [
+    ['🚙', '问界M9升级权益包｜商务版套餐', '多项目组合权益包，适配商务出行场景', '¥29,999'],
+    ['🪟', '适配问界新M7｜专用玻璃隔热膜', '高清前挡 + 中隐侧后挡，支持多版本选择', '¥1,780'],
+    ['📺', '后排娱乐屏升级', '高清观影、娱乐、投屏一体化体验', '¥8,800']
+  ],
+  '智界升级': [
+    ['🚗', '智界 R7 舒适焕新套装', '隔音、座椅、扶手收纳等舒适项目组合', '¥6,999'],
+    ['🛡️', '智界 S7 隐形车衣', 'TPU 材质，重点保护高频使用区域', '¥9,800']
+  ],
+  '享界升级': [['🚘', '享界 S9 商务座舱升级', '灯光、软包、静音多项组合升级', '¥18,600']],
+  '尊界升级': [['✨', '尊界专属内饰氛围套装', '强化豪华感、灯光层次与材质细节', '¥12,800']],
+  '极氪升级': [['🛻', '极氪 001 露营拓展组合', '外放电、折叠桌板、储物模块组合', '¥4,880']],
+  '蔚来升级': [['🚐', '蔚来 ET7 真皮镀膜套装', '内饰护理、表面防护与局部修复', '¥2,380']],
+  '理想升级': [['🏎️', '理想 L9 家庭观影升级', '后排娱乐屏、吸顶电视、储物拓展', '¥13,600']],
+  '小米升级': [['🔋', '小米 SU7 通勤防护包', '隔热、脚垫、防污护理组合', '¥3,280']]
+};
+let selectedCount = 0;
+let currentCategory = '问界升级';
+
+function renderCategories() {
+  const nav = document.getElementById('catNav');
+  nav.innerHTML = Object.keys(catalogData).map((name, index) => `
+    <div class="catalog-cat ${index === 0 ? 'active' : ''}" onclick="switchCategory(this,'${name}')">${name}</div>
+  `).join('');
+}
+
+function renderProducts() {
+  document.getElementById('listTitle').textContent = currentCategory;
+  document.getElementById('productList').innerHTML = catalogData[currentCategory].map(([icon, title, desc, price]) => `
+    <div class="product-row" onclick="go('product-detail')">
+      <div class="product-thumb">${icon}</div>
+      <div class="product-main">
+        <div class="product-name">${title}</div>
+        <div class="product-desc">${desc}</div>
+        <div class="product-bottom">
+          <div class="product-price">${price}</div>
+          <button class="add-btn" onclick="event.stopPropagation(); addItem('${title.replace(/'/g, '')}')">加入预约单</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchCategory(el, name) {
+  currentCategory = name;
+  document.querySelectorAll('.catalog-cat').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts();
+}
+
+function addItem(title) {
+  addBookingItem({
+    name: title,
+    price: title.includes('M9') ? '¥29,999' : '¥1,780',
+    spec: '标准版 / 当前门店可预约',
+    icon: title.includes('隔热膜') ? '🪟' : '🚙'
+  });
+  const draft = getDraftBooking() || {};
+  draft.storeName = selectedStore.name;
+  setDraftBooking(draft);
+  selectedCount = countBookingItems();
+  document.getElementById('countText').textContent = `${selectedCount} 个项目`;
+}
+
+document.querySelectorAll('.topic-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.topic-chip').forEach(item => item.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+renderCategories();
+renderProducts();
+selectedCount = countBookingItems();
+document.getElementById('countText').textContent = `${selectedCount} 个项目`;
+</script>
+</body>
+</html>

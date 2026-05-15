@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>预约单提交页</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .page { padding-bottom: calc(var(--tabbar-h) + 110px); }
+  .summary-card {
+    margin: 12px 16px 0;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .summary-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; }
+  .summary-head strong { font-size: 16px; }
+  .summary-head span { font-size: 12px; color: var(--muted); }
+  .booking-item {
+    display:flex; gap:12px; padding: 12px 0; border-top:1px solid var(--border);
+  }
+  .booking-item:first-of-type { border-top:none; padding-top: 0; }
+  .summary-icon {
+    width: 60px; height: 60px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #f7f0e4, #eadac3);
+    font-size: 26px; flex-shrink: 0;
+  }
+  .summary-title { font-size: 14px; font-weight: 700; line-height: 1.45; }
+  .summary-price { margin-top: 4px; font-size: 15px; color: var(--accent2); font-weight: 700; }
+  .summary-spec { margin-top: 4px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .summary-qty { margin-top: 4px; font-size: 12px; color: var(--muted); }
+  .sum-bar {
+    margin-top: 10px; padding-top: 12px; border-top: 1px dashed var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .sum-bar .label { font-size: 13px; color: var(--muted); }
+  .sum-bar .value { font-size: 18px; color: var(--accent2); font-weight: 700; }
+  .info-card {
+    margin: 12px 16px 0;
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { color: var(--muted); }
+  .time-slots { display: flex; gap: 10px; padding: 0 16px 16px; }
+  .slot {
+    flex: 1; text-align: center; padding: 10px 0; border-radius: 12px;
+    border: 1px solid var(--border); cursor: pointer; font-size: 14px;
+  }
+  .slot.active { background: rgba(216,160,74,0.14); color: var(--accent2); border-color: var(--accent); font-weight: 700; }
+  .form-card {
+    margin: 12px 16px 0;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 14px 16px 6px;
+  }
+  .submit-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: var(--tabbar-h);
+    background: rgba(255,255,255,0.97);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    backdrop-filter: blur(12px);
+    z-index: 9;
+  }
+  .submit-tip { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon" onclick="go('product-detail')">‹</div>
+    <div class="nav-title">确认预约</div>
+    <div class="nav-icon"></div>
+  </div>
+
+  <div class="page">
+    <div class="summary-card">
+      <div class="summary-head">
+        <strong>已选预约项目</strong>
+        <span id="itemCount">共 1 项</span>
+      </div>
+      <div id="bookingItems"></div>
+      <div class="sum-bar">
+        <div class="label">项目合计</div>
+        <div class="value" id="bookingTotal">¥29,999.00</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-row"><div class="label">当前门店</div><div id="storeName">蓝辉轻改（深圳南山店）</div></div>
+      <div class="info-row"><div class="label">门店地址</div><div style="text-align:right;max-width:210px">南山区科技园南路 88 号</div></div>
+      <div class="info-row"><div class="label">到店日期</div><div id="dateValue">2026-05-13</div></div>
+      <div style="padding: 10px 16px 6px;font-size:13px;color:var(--muted)">预约时间段</div>
+      <div class="time-slots">
+        <div class="slot active" onclick="pickSlot(this, '上午')">上午</div>
+        <div class="slot" onclick="pickSlot(this, '下午')">下午</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-field">
+        <div class="form-label"><span class="required">*</span> 手机号</div>
+        <input class="input-field" id="phone" type="tel" placeholder="请输入手机号">
+      </div>
+      <div class="form-field">
+        <div class="form-label"><span class="required">*</span> 车型</div>
+        <input class="input-field" id="carModel" type="text" placeholder="如：问界M9 2024款">
+      </div>
+      <div class="form-field">
+        <div class="form-label">意向备注</div>
+        <textarea class="input-field" id="remark" rows="4" style="resize:none;height:88px" placeholder="可补充车型配置、到店诉求、安装偏好等"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-bar">
+    <button class="btn-primary" onclick="submitBooking()">提交预约</button>
+    <div class="submit-tip">提交后会生成预约单号，总部或门店将根据你填写的门店、时间段和车型信息尽快联系确认。</div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item active" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+
+<script>
+const booking = getDraftBooking();
+const selectedStore = getSelectedStore();
+let pickedSlot = '上午';
+function parsePrice(value) {
+  return Number(String(value || '0').replace(/[^\d.]/g, '')) || 0;
+}
+function renderBookingItems() {
+  const items = (booking && Array.isArray(booking.items) && booking.items.length)
+    ? booking.items
+    : [{ name: '问界M9升级权益包｜鲲鹏展翅【商务版】套餐', price: '¥29,999.00', spec: '商务版 / 原车色系', quantity: 1, icon: '🚙' }];
+  document.getElementById('itemCount').textContent = `共 ${items.reduce((sum, item) => sum + (item.quantity || 1), 0)} 项`;
+  document.getElementById('bookingItems').innerHTML = items.map(item => `
+    <div class="booking-item">
+      <div class="summary-icon">${item.icon || '📦'}</div>
+      <div style="flex:1">
+        <div class="summary-title">${item.name}</div>
+        <div class="summary-price">${item.price}</div>
+        <div class="summary-spec">已选：${item.spec || '标准版'}</div>
+        <div class="summary-qty">数量：${item.quantity || 1}</div>
+      </div>
+    </div>
+  `).join('');
+  const total = items.reduce((sum, item) => sum + parsePrice(item.price) * (item.quantity || 1), 0);
+  document.getElementById('bookingTotal').textContent = `¥${total.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+if (selectedStore) {
+  document.getElementById('storeName').textContent = selectedStore.name;
+}
+renderBookingItems();
+function pickSlot(el, value) {
+  pickedSlot = value;
+  document.querySelectorAll('.slot').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+}
+function submitBooking() {
+  const phone = document.getElementById('phone').value.trim();
+  const carModel = document.getElementById('carModel').value.trim();
+  if (!/^1\d{10}$/.test(phone)) { alert('请输入正确的11位手机号'); return; }
+  if (!carModel) { alert('请填写车型'); return; }
+  submitCurrentBooking({
+    phone,
+    carModel,
+    timeSlot: pickedSlot,
+    visitDate: document.getElementById('dateValue').textContent,
+    storeName: (selectedStore && selectedStore.name) || '蓝辉轻改（深圳南山店）',
+    remark: document.getElementById('remark').value.trim()
+  });
+  go('booking-success');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>蓝辉轻改运营后台原型</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f6fb;
+      --panel: #ffffff;
+      --line: #e7ebf3;
+      --text: #1f2430;
+      --muted: #7d8698;
+      --accent: #d8a04a;
+      --accent-strong: #c97a18;
+      --accent-soft: #fbf2e2;
+      --nav: #1d2432;
+      --shadow: 0 18px 40px rgba(35, 46, 80, 0.08);
+      --radius: 24px;
+    }
+
+    body {
+      font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #212938, #161d2a);
+      color: #fff;
+      padding: 28px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .brand {
+      padding: 6px 10px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .brand p {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .brand-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .brand-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      color: #f6dfb4;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nav-title {
+      margin: 0 10px 6px;
+      color: rgba(255,255,255,0.42);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+      text-align: left;
+      padding: 16px 18px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: 180ms ease;
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-btn strong {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .nav-btn span {
+      font-size: 12px;
+      line-height: 1.6;
+      opacity: 0.82;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(216,160,74,0.22), rgba(201,122,24,0.22));
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(246,223,180,0.16);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.56);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 28px 16px;
+    }
+
+    .topbar h2 {
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .topbar p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+      max-width: 860px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      height: 42px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+    }
+
+    .btn-primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(201,122,24,0.18);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      padding: 0 28px 20px;
+    }
+
+    .summary-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 20px 22px;
+    }
+
+    .summary-card .label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .summary-card .value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .summary-card .note {
+      color: #9ea6b6;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .workspace {
+      padding: 0 24px 24px;
+    }
+
+    .workspace-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: calc(100vh - 270px);
+    }
+
+    .workspace-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #fafbfd);
+    }
+
+    .workspace-head h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .workspace-head p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .workspace-tip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    iframe {
+      width: 100%;
+      height: calc(100vh - 360px);
+      min-height: 760px;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      iframe {
+        min-height: 720px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="brand">
+        <h1>蓝辉轻改后台</h1>
+        <p>基于最新 PRD 和最近的产品调整，这套后台原型已经围绕“预约到店型轻改装商城”重构。它服务的是总部运营，而不是门店后台。</p>
+        <div class="brand-tags">
+          <span class="brand-tag">无支付阶段</span>
+          <span class="brand-tag">预约单聚合意向</span>
+          <span class="brand-tag">双路径并存</span>
+        </div>
+      </section>
+
+      <section>
+        <div class="nav-title">核心后台模块</div>
+        <div class="nav-list" id="navList"></div>
+      </section>
+
+      <section class="sidebar-footer">
+        后台关键约束：
+        <br>1. 总部统一管理门店、商品、套餐和预约单
+        <br>2. 门店负责线下承接，不需要单独门店后台
+        <br>3. 预约单不是支付订单，而是意向汇总后的服务工单入口
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">后台门店管理</h2>
+          <p id="pageDesc">统一维护门店资料、营业状态、配送/自提能力、服务范围和可承接项目，支撑“先选门店”与“先选商品再选门店”两条前台路径。</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" type="button" onclick="window.open('../index.html', '_blank')">查看前台原型</button>
+          <button class="btn btn-primary" type="button">导出后台方案</button>
+        </div>
+      </header>
+
+      <section class="summary">
+        <article class="summary-card">
+          <div class="label">产品定位</div>
+          <div class="value">预约到店</div>
+          <div class="note">第一阶段打通“浏览商品 → 选择门店 → 提交预约 → 总部处理 → 门店承接”的完整闭环。</div>
+        </article>
+        <article class="summary-card">
+          <div class="label">前台双路径</div>
+          <div class="value">2 条</div>
+          <div class="note">路径 A：先选商品再选门店。路径 B：先选门店再浏览门店商品。</div>
+        </article>
+        <article class="summary-card">
+          <div class="label">预约单语义</div>
+          <div class="value">像购物车</div>
+          <div class="note">预约单承载多商品/套餐意向，但不做支付。后台重点处理的是服务确认、门店分发和状态流转。</div>
+        </article>
+        <article class="summary-card">
+          <div class="label">后台角色</div>
+          <div class="value">总部运营</div>
+          <div class="note">总部集中管理门店、商品、套餐、首页配置与预约单统计，门店只负责线下服务。</div>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <div class="workspace-card">
+          <div class="workspace-head">
+            <div>
+              <h3 id="frameTitle">后台门店管理</h3>
+              <p id="frameDesc">和最新 PRD 一致：门店是预约流程中的服务承接主体，需要同时支撑门店选择和门店商品可见性。</p>
+            </div>
+            <div class="workspace-tip" id="frameTip">门店能力 + 商品覆盖 + 营业状态</div>
+          </div>
+          <iframe id="frame" src="../screens/21-admin-store-manage.html" title="蓝辉轻改后台原型"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pages = [
+      {
+        key: 'stores',
+        title: '后台门店管理',
+        desc: '统一维护门店资料、营业状态、配送/自提能力、服务范围和可承接项目，支撑“先选门店”与“先选商品再选门店”两条前台路径。',
+        tip: '门店能力 + 商品覆盖 + 营业状态',
+        file: '../screens/21-admin-store-manage.html',
+        note: '门店是预约承接主体'
+      },
+      {
+        key: 'products',
+        title: '后台商品管理',
+        desc: '维护商品、规格、适配车型、价格说明与门店覆盖关系，前台分类页、商品列表页和商品详情页都依赖这里的数据。',
+        tip: '商品资料 + 车型适配 + 门店覆盖',
+        file: '../screens/22-admin-product-manage.html',
+        note: '详情页可先看商品再选门店'
+      },
+      {
+        key: 'packages',
+        title: '后台套餐管理',
+        desc: '围绕问界 / 新M7 / M9 / R7 等车型配置套餐和权益包，支撑首页精选套餐、车型专题和套餐详情页。',
+        tip: '车型套餐 + 权益包 + 主题组合',
+        file: '../screens/23-admin-package-manage.html',
+        note: '套餐可包含多个商品/服务'
+      },
+      {
+        key: 'bookings',
+        title: '后台预约单管理',
+        desc: '预约单按最新逻辑是“购物车式意向汇总”后的提交结果。后台要处理的是状态推进、客户联系、门店分配和到店安排。',
+        tip: '多商品预约单 + 状态流转 + 客服跟进',
+        file: '../screens/24-admin-booking-manage.html',
+        note: '无支付，重服务确认'
+      },
+      {
+        key: 'home',
+        title: '后台首页配置',
+        desc: '首页内容由总部后台统一配置，包含 Banner、热门项目、精选套餐、案例专题和门店导流位，确保运营活动可快速生效。',
+        tip: '首页 Banner + 热门项目 + 运营楼层',
+        file: '../screens/25-admin-home-config.html',
+        note: '前台首页由后台驱动'
+      },
+      {
+        key: 'analytics',
+        title: '后台数据统计',
+        desc: '重点分析“浏览 → 加入预约单 → 选择门店 → 提交预约”的漏斗，并对比两条前台路径的表现差异。',
+        tip: '预约漏斗 + 门店分布 + 路径对比',
+        file: '../screens/26-admin-analytics.html',
+        note: '衡量预约单聚合作用'
+      }
+    ];
+
+    const navList = document.getElementById('navList');
+    const frame = document.getElementById('frame');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageDesc = document.getElementById('pageDesc');
+    const frameTitle = document.getElementById('frameTitle');
+    const frameDesc = document.getElementById('frameDesc');
+    const frameTip = document.getElementById('frameTip');
+
+    function renderNav() {
+      navList.innerHTML = pages.map((page, index) => `
+        <button class="nav-btn ${index === 0 ? 'active' : ''}" data-key="${page.key}" type="button">
+          <strong>${page.title}</strong>
+          <span>${page.note}</span>
+        </button>
+      `).join('');
+
+      navList.querySelectorAll('.nav-btn').forEach((button) => {
+        button.addEventListener('click', () => setActive(button.dataset.key));
+      });
+    }
+
+    function setActive(key) {
+      const current = pages.find((page) => page.key === key) || pages[0];
+      navList.querySelectorAll('.nav-btn').forEach((button) => {
+        button.classList.toggle('active', button.dataset.key === key);
+      });
+      pageTitle.textContent = current.title;
+      pageDesc.textContent = current.desc;
+      frameTitle.textContent = current.title;
+      frameDesc.textContent = current.desc;
+      frameTip.textContent = current.tip;
+      frame.src = current.file;
+    }
+
+    renderNav();
+  </script>
+</body>
+</html>

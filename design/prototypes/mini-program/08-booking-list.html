@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>预约单</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .page {
+      min-height: 100vh;
+      padding-bottom: 150px;
+      background: #f5f6fb;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid #ececf4;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .page-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: #202020;
+    }
+    .top-link {
+      border: 0;
+      background: none;
+      color: #8f8f9c;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .intro-card,
+    .items-card,
+    .store-card {
+      background: #fff;
+      border-radius: 24px;
+      margin: 16px;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+      overflow: hidden;
+    }
+    .intro-card {
+      padding: 18px 18px 16px;
+      color: #8c6320;
+      background: #f7efe4;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid #f0f0f5;
+    }
+    .card-head h2 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      color: #202020;
+    }
+    .card-head span {
+      color: #9a9aa5;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .booking-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      padding: 20px 22px;
+      border-top: 1px solid #f4f4f8;
+    }
+    .booking-item:first-of-type {
+      border-top: 0;
+    }
+    .booking-thumb {
+      width: 100px;
+      height: 100px;
+      border-radius: 22px;
+      background: linear-gradient(160deg, #f6ecd9, #fff7ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+    }
+    .booking-main {
+      min-width: 0;
+    }
+    .booking-title {
+      margin: 2px 0 8px;
+      font-size: 18px;
+      line-height: 1.45;
+      font-weight: 800;
+      color: #202020;
+    }
+    .booking-meta {
+      color: #9a9aa5;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .booking-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .price-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .price {
+      color: #d48f24;
+      font-size: 21px;
+      font-weight: 900;
+    }
+    .remove-btn {
+      border: 0;
+      background: none;
+      padding: 0;
+      color: #b0b0bb;
+      font-size: 14px;
+      text-align: left;
+    }
+    .qty-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .qty-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #e5e5ec;
+      background: #fff;
+      font-size: 28px;
+      color: #3b3b45;
+      line-height: 1;
+    }
+    .qty-value {
+      min-width: 18px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #202020;
+    }
+    .store-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+    }
+    .store-grid div {
+      padding: 20px 22px;
+      border-top: 1px solid #f4f4f8;
+    }
+    .store-grid div:nth-child(odd) {
+      color: #a4a4b1;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .store-grid div:nth-child(even) {
+      font-size: 16px;
+      font-weight: 700;
+      color: #26262d;
+      line-height: 1.6;
+    }
+    .empty-card {
+      background: #fff;
+      margin: 16px;
+      border-radius: 24px;
+      padding: 52px 24px 42px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(31, 35, 61, 0.06);
+    }
+    .empty-card .icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+    }
+    .empty-card h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      color: #202020;
+    }
+    .empty-card p {
+      margin: 0 auto 22px;
+      max-width: 280px;
+      color: #8f8f9c;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .empty-action,
+    .ghost-btn,
+    .primary-btn {
+      border-radius: 999px;
+      height: 52px;
+      font-size: 17px;
+      font-weight: 800;
+    }
+    .empty-action,
+    .primary-btn {
+      border: 0;
+      background: linear-gradient(135deg, #d8a04a, #c97a18);
+      color: #fff;
+    }
+    .ghost-btn {
+      border: 2px solid #d8a04a;
+      background: #fff;
+      color: #c98927;
+    }
+    .bottom-submit {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.98);
+      border-top: 1px solid #ececf4;
+      padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .amount-box {
+      min-width: 136px;
+    }
+    .amount-label {
+      color: #9d9daa;
+      font-size: 13px;
+    }
+    .amount-value {
+      margin-top: 4px;
+      color: #cd861e;
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .bottom-submit .ghost-btn {
+      width: 104px;
+      flex: none;
+    }
+    .bottom-submit .primary-btn {
+      flex: 1;
+    }
+    .helper-tip {
+      margin: 0 16px;
+      color: #8f8f9c;
+      font-size: 13px;
+      text-align: center;
+    }
+    .helper-tip button {
+      border: 0;
+      background: none;
+      color: #c98927;
+      font-weight: 700;
+      padding: 0;
+    }
+    .tabbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(78px + env(safe-area-inset-bottom));
+      background: #fff;
+      border-top: 1px solid #ececf4;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      z-index: 15;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .tab-item {
+      border: 0;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #7e808d;
+      font-size: 12px;
+    }
+    .tab-item.active {
+      color: #d48f24;
+      font-weight: 800;
+    }
+    .tab-icon {
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-row">
+        <h1 class="page-title">预约单</h1>
+        <button class="top-link" type="button" onclick="go('booking-history')">我的预约</button>
+      </div>
+    </header>
+
+    <section class="intro-card">
+      预约单的作用类似购物车，用来承载客户当前感兴趣的多个项目/套餐。这里不做支付，只做预约意向汇总，确认后统一提交预约。
+    </section>
+
+    <div id="bookingContent"></div>
+
+    <div class="helper-tip">
+      已提交的预约记录请到 <button type="button" onclick="go('profile')">我的</button> 里的 <button type="button" onclick="go('booking-history')">我的预约</button> 查看。
+    </div>
+  </div>
+
+  <script src="./router.js"></script>
+  <script>
+    function readDraft() {
+      try {
+        const parsed = JSON.parse(sessionStorage.getItem('draftBooking') || '{}');
+        parsed.items = Array.isArray(parsed.items) ? parsed.items : [];
+        return parsed;
+      } catch (err) {
+        return { items: [] };
+      }
+    }
+
+    function writeDraft(draft) {
+      sessionStorage.setItem('draftBooking', JSON.stringify(draft));
+    }
+
+    function readStore() {
+      try {
+        return JSON.parse(sessionStorage.getItem('selectedStore') || 'null');
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function normalizeItem(item) {
+      return {
+        title: item.title || item.name || item.productName || '轻改装项目',
+        spec: item.spec || item.variant || item.option || '标准版',
+        price: Number(item.price || item.amount || 0),
+        quantity: Math.max(1, Number(item.quantity || 1)),
+        cover: item.cover || item.image || item.thumb || '🚙'
+      };
+    }
+
+    function updateQuantity(index, delta) {
+      const draft = readDraft();
+      if (!draft.items[index]) return;
+      const next = Math.max(1, Number(draft.items[index].quantity || 1) + delta);
+      draft.items[index].quantity = next;
+      writeDraft(draft);
+      renderPage();
+    }
+
+    function removeItem(index) {
+      const draft = readDraft();
+      draft.items.splice(index, 1);
+      writeDraft(draft);
+      renderPage();
+    }
+
+    function goPickStore() {
+      sessionStorage.setItem('afterStoreTarget', 'booking-list');
+      go('store');
+    }
+
+    function goSubmit() {
+      const draft = readDraft();
+      if (!draft.items.length) {
+        window.alert('请先添加至少一个商品或套餐到预约单。');
+        return;
+      }
+      if (!readStore()) {
+        window.alert('请先选择服务门店，再填写预约信息。');
+        goPickStore();
+        return;
+      }
+      go('booking-submit');
+    }
+
+    function renderEmpty() {
+      document.getElementById('bookingContent').innerHTML = `
+        <section class="empty-card">
+          <div class="icon">🧺</div>
+          <h2>预约单还是空的</h2>
+          <p>先去分类页、商品列表页或门店商品页挑选感兴趣的项目，再把多个商品一起加入预约单。</p>
+          <button class="empty-action" type="button" onclick="go('category')">去挑选商品</button>
+        </section>
+      `;
+    }
+
+    function renderPage() {
+      const draft = readDraft();
+      const store = readStore();
+      const items = draft.items.map(normalizeItem);
+
+      if (!items.length) {
+        renderEmpty();
+        return;
+      }
+
+      const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
+      const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      const itemHtml = items.map((item, index) => `
+        <article class="booking-item">
+          <div class="booking-thumb">${item.cover}</div>
+          <div class="booking-main">
+            <h3 class="booking-title">${item.title}</h3>
+            <div class="booking-meta">规格：${item.spec}${store ? ' / 当前门店可预约' : ' / 待选择服务门店'}</div>
+            <div class="booking-footer">
+              <div class="price-block">
+                <div class="price">¥${item.price.toLocaleString('zh-CN')}</div>
+                <button class="remove-btn" type="button" onclick="removeItem(${index})">移出预约单</button>
+              </div>
+              <div class="qty-box">
+                <button class="qty-btn" type="button" onclick="updateQuantity(${index}, -1)">−</button>
+                <div class="qty-value">${item.quantity}</div>
+                <button class="qty-btn" type="button" onclick="updateQuantity(${index}, 1)">+</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      document.getElementById('bookingContent').innerHTML = `
+        <section class="items-card">
+          <div class="card-head">
+            <h2>已选项目</h2>
+            <span>共 ${totalCount} 件</span>
+          </div>
+          ${itemHtml}
+        </section>
+
+        <section class="store-card">
+          <div class="store-grid">
+            <div>当前门店</div>
+            <div>${store ? store.name || '已选择服务门店' : '暂未选择，请先确认服务门店'}</div>
+            <div>说明</div>
+            <div>一个预约单可包含多款商品/套餐，最终统一提交给总部或门店联系确认。</div>
+          </div>
+        </section>
+
+        <div class="bottom-submit">
+          <div class="amount-box">
+            <div class="amount-label">预约意向合计</div>
+            <div class="amount-value">¥${totalAmount.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+          </div>
+          <button class="ghost-btn" type="button" onclick="goPickStore()">选择门店</button>
+          <button class="primary-btn" type="button" onclick="goSubmit()">${store ? '去填写预约信息' : '先选门店再预约'}</button>
+        </div>
+      `;
+    }
+
+    renderPage();
+  </script>
+</body>
+</html>

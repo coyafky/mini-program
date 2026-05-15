@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>商品分类</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .search-wrap { padding: 10px 16px 8px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border-radius: 20px; padding: 10px 14px; cursor: pointer;
+  }
+  .search-bar input { flex: 1; border: none; background: transparent; outline: none; color: var(--muted); font-size: 14px; }
+  .cat-layout { min-height: calc(100vh - var(--topbar-h) - var(--tabbar-h) - 58px); }
+  .cat-left { width: 92px; }
+  .cat-item { padding: 18px 8px; font-size: 14px; }
+  .cat-right { background: #fff; }
+  .group-block { padding-bottom: 8px; }
+  .group-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 16px 10px; font-size: 16px; font-weight: 700;
+  }
+  .group-head span { color: var(--muted); font-size: 12px; font-weight: 500; }
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 10px;
+    padding: 0 16px 14px;
+  }
+  .entry-card { text-align: center; cursor: pointer; }
+  .entry-card:active { opacity: 0.84; }
+  .entry-icon {
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f7f0e4, #f1e5d1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px;
+    margin-bottom: 8px;
+  }
+  .entry-name { font-size: 13px; line-height: 1.35; }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon"></div>
+    <div class="nav-title">商品分类</div>
+    <div class="nav-icon">⌕</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar" onclick="go('home')">
+      <span style="font-size:16px;color:var(--muted)">🔍</span>
+      <input placeholder="点击搜索商品信息" readonly>
+    </div>
+  </div>
+
+  <div class="cat-layout">
+    <div class="cat-left">
+      <div class="cat-item active" onclick="selectCat(this, 0)">问界升级</div>
+      <div class="cat-item" onclick="selectCat(this, 1)">智界升级</div>
+      <div class="cat-item" onclick="selectCat(this, 2)">享界升级</div>
+      <div class="cat-item" onclick="selectCat(this, 3)">尊界升级</div>
+      <div class="cat-item" onclick="selectCat(this, 4)">极氪升级</div>
+      <div class="cat-item" onclick="selectCat(this, 5)">蔚来升级</div>
+      <div class="cat-item" onclick="selectCat(this, 6)">理想升级</div>
+      <div class="cat-item" onclick="selectCat(this, 7)">小米升级</div>
+      <div class="cat-item" onclick="selectCat(this, 8)">车载好物</div>
+      <div class="cat-item" onclick="selectCat(this, 9)">户外专区</div>
+      <div class="cat-item" onclick="selectCat(this, 10)">通用项目</div>
+    </div>
+    <div class="cat-right" id="catRight"></div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item active" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+
+<script>
+const data = [
+  {
+    groups: [
+      { title: '套餐权益包', items: [['🚙','新M7套装'],['🚘','M9套装'],['🚗','M8套装'],['🛸','R7套装'],['🏎️','理想套装'],['🚀','享界套装']] },
+      { title: '问界升级', items: [['🚗','问界 M6'],['🚙','26款 M7'],['🚘','问界 M9'],['🚕','问界 M8'],['🛻','问界 M7'],['🚐','问界 M5']] },
+      { title: '通用项目', items: [['🛡️','隐形车衣'],['🎨','隔热膜'],['📺','流媒体后视镜'],['🖥️','后排娱乐屏'],['📽️','吸顶电视'],['💳','ETC']] }
+    ]
+  },
+  { groups: [{ title: '智界升级', items: [['🚗','智界 S7'],['🚘','智界 R7'],['🧩','通用项目']] }] },
+  { groups: [{ title: '享界升级', items: [['🚗','享界 S9'],['🛋️','舒适项目'],['🎁','权益包']] }] },
+  { groups: [{ title: '尊界升级', items: [['🚗','尊界专题'],['🎬','影音升级'],['✨','套餐专区']] }] },
+  { groups: [{ title: '极氪升级', items: [['🚗','极氪 001'],['🚘','极氪 007'],['🧰','通用精品']] }] },
+  { groups: [{ title: '蔚来升级', items: [['🚗','蔚来 ET7'],['🚙','蔚来 ES8'],['🧴','护理精品']] }] },
+  { groups: [{ title: '理想升级', items: [['🚗','理想 L9'],['🚘','理想 L8'],['🚙','理想 L7'],['🎁','理想套装']] }] },
+  { groups: [{ title: '小米升级', items: [['🚗','小米 SU7'],['🛡️','外观升级'],['📦','专属套装']] }] },
+  { groups: [{ title: '车载好物', items: [['🪑','头枕腰靠'],['🧷','脚垫后备箱垫'],['📹','行车记录仪'],['🧼','真皮镀膜'],['🪟','小桌板'],['🔊','DSP功放']] }] },
+  { groups: [{ title: '户外专区', items: [['🏕️','车顶帐篷'],['🧳','车顶行李箱'],['🚲','折叠自行车'],['🪑','露营桌椅']] }] },
+  { groups: [{ title: '通用项目', items: [['🛡️','隐形车衣'],['🎨','隔热膜'],['📺','流媒体后视镜'],['🖥️','后排娱乐屏'],['📽️','吸顶电视'],['🔌','充电枪']] }] }
+];
+
+function renderCat(idx) {
+  const d = data[idx] || data[0];
+  const el = document.getElementById('catRight');
+  el.innerHTML = d.groups.map(group => `
+    <div class="group-block">
+      <div class="group-head">${group.title}<span onclick="go('product-list')">查看全部 ›</span></div>
+      <div class="entry-grid">
+        ${group.items.map(item => `
+          <div class="entry-card" onclick="go('product-list')">
+            <div class="entry-icon">${item[0]}</div>
+            <div class="entry-name">${item[1]}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectCat(el, idx) {
+  document.querySelectorAll('.cat-item').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+  renderCat(idx);
+}
+
+renderCat(0);
+</script>
+</body>
+</html>

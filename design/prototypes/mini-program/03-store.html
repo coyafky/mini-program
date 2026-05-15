@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>门店选择</title>
+<link rel="stylesheet" href="styles.css">
+<script src="router.js"></script>
+<style>
+  .search-wrap { padding: 10px 16px 6px; }
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border-radius: 20px; padding: 10px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .search-bar input { flex: 1; border: none; background: transparent; outline: none; font-size: 14px; color: var(--muted); }
+  .helper-note {
+    margin: 0 16px 10px;
+    background: rgba(216,160,74,0.12);
+    color: #8d6426;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .section-label { padding: 8px 16px 0; font-size: 12px; color: var(--muted); }
+  .store-actions {
+    display: flex; gap: 8px; margin-top: 8px;
+  }
+  .mini-btn {
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--fg);
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <div class="nav-icon"></div>
+    <div class="nav-title">选择门店</div>
+    <div class="nav-icon">⌕</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span style="font-size:16px;color:var(--muted)">🔍</span>
+      <input placeholder="搜索门店名称 / 城市 / 商圈" readonly>
+    </div>
+  </div>
+
+  <div class="helper-note">从门店进入的浏览和预约会默认绑定当前服务门店。建议先选择最近、营业中且能承接你车型项目的门店。</div>
+
+  <div class="section-label">当前默认门店</div>
+  <div class="store-card selected" onclick="chooseStore(0)">
+    <div style="width:46px;height:46px;border-radius:12px;background:rgba(216,160,74,0.16);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏪</div>
+    <div class="store-info">
+      <div class="store-name">蓝辉轻改（深圳南山店）</div>
+      <div class="store-meta">
+        <span><span class="status-dot open"></span>营业中</span>
+        <span>📍 南山区科技园南路 88 号</span>
+        <span>🕐 09:00 - 18:00</span>
+        <span>🚗 距您 0.8km</span>
+      </div>
+      <div class="store-actions">
+        <button class="mini-btn">查看定位导航</button>
+        <button class="mini-btn">拨打门店电话</button>
+      </div>
+    </div>
+    <div class="store-action">进店选购 ›</div>
+  </div>
+
+  <div class="section-label">附近可选门店</div>
+  <div class="store-card" onclick="chooseStore(1)">
+    <div style="width:46px;height:46px;border-radius:12px;background:#eef3ff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏪</div>
+    <div class="store-info">
+      <div class="store-name">蓝辉轻改（广州天河店）</div>
+      <div class="store-meta">
+        <span><span class="status-dot open"></span>营业中</span>
+        <span>📍 天河区珠江新城花城大道</span>
+        <span>🕐 09:00 - 19:00</span>
+        <span>🚗 距您 3.2km</span>
+      </div>
+    </div>
+    <div class="store-action">进店选购 ›</div>
+  </div>
+  <div class="store-card" onclick="chooseStore(2)">
+    <div style="width:46px;height:46px;border-radius:12px;background:#eef3ff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏪</div>
+    <div class="store-info">
+      <div class="store-name">蓝辉轻改（东莞长安店）</div>
+      <div class="store-meta">
+        <span><span class="status-dot open"></span>营业中</span>
+        <span>📍 东莞市长安镇乌沙社区</span>
+        <span>🕐 08:30 - 18:30</span>
+        <span>🚗 距您 12.5km</span>
+      </div>
+    </div>
+    <div class="store-action">进店选购 ›</div>
+  </div>
+  <div class="store-card" onclick="chooseStore(3)">
+    <div style="width:46px;height:46px;border-radius:12px;background:#fff4e8;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏪</div>
+    <div class="store-info">
+      <div class="store-name">蓝辉轻改（佛山顺德店）</div>
+      <div class="store-meta">
+        <span><span class="status-dot closed"></span>休息中</span>
+        <span>📍 佛山顺德大良镇近良路</span>
+        <span>🕐 明日 09:00 营业</span>
+        <span>🚗 距您 18km</span>
+      </div>
+    </div>
+    <div class="store-action" style="color:var(--muted)">休息中</div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabbar-item" onclick="go('home')"><span class="tab-icon">🏠</span>首页</div>
+    <div class="tabbar-item" onclick="go('category')"><span class="tab-icon">📂</span>分类</div>
+    <div class="tabbar-item active" onclick="go('store')"><span class="tab-icon">🏪</span>门店</div>
+    <div class="tabbar-item" onclick="go('booking-list')"><span class="tab-icon">📋</span>预约</div>
+    <div class="tabbar-item" onclick="go('profile')"><span class="tab-icon">👤</span>我的</div>
+  </div>
+
+<script>
+const stores = [
+  { name: '蓝辉轻改（深圳南山店）', address: '南山区科技园南路 88 号', distance: '0.8km', hours: '09:00 - 18:00', phone: '0755-26781234', status: 'open' },
+  { name: '蓝辉轻改（广州天河店）', address: '天河区珠江新城花城大道', distance: '3.2km', hours: '09:00 - 19:00', phone: '020-88990011', status: 'open' },
+  { name: '蓝辉轻改（东莞长安店）', address: '东莞市长安镇乌沙社区', distance: '12.5km', hours: '08:30 - 18:30', phone: '0769-81239876', status: 'open' },
+  { name: '蓝辉轻改（佛山顺德店）', address: '佛山顺德大良镇近良路', distance: '18km', hours: '明日 09:00 营业', phone: '0757-89991122', status: 'closed' }
+];
+function chooseStore(index) {
+  const store = stores[index];
+  setSelectedStore(store);
+  if (store.status === 'open') {
+    const nextPage = sessionStorage.getItem('afterStoreTarget') || 'store-products';
+    sessionStorage.removeItem('afterStoreTarget');
+    setTimeout(() => go(nextPage), 240);
+  }
+}
+if (!getSelectedStore()) setSelectedStore(stores[0]);
+</script>
+</body>
+</html>

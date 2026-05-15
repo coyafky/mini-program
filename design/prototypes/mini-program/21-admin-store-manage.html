@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台门店管理</title>
+  <link rel="stylesheet" href="./admin-styles.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>门店管理</h1>
+        <p>维护总部门店档案、营业状态、配送/自提能力、门店位置与可承接服务能力。前台用户无论是“先选门店”还是“先选商品再选门店”，最终都依赖这里的门店数据与服务范围。</p>
+        <div class="hero-tags">
+          <span class="hero-tag">门店基础信息</span>
+          <span class="hero-tag">营业时段与状态</span>
+          <span class="hero-tag">服务能力配置</span>
+          <span class="hero-tag">门店商品覆盖</span>
+        </div>
+      </div>
+      <aside class="aside-card">
+        <h3>页面目标</h3>
+        <p>让运营人员快速查看哪些门店可接单、支持哪些车型/项目、是否支持配送，并可以补全门店资料与上下线状态。</p>
+        <ul>
+          <li>支持新增门店、编辑门店、停用门店</li>
+          <li>支持配置配送/自提、营业时间和服务标签</li>
+          <li>支持查看门店已绑定商品数量和预约承接量</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-label">门店总数</div>
+        <div class="stat-value">128</div>
+        <div class="stat-note">覆盖 23 个城市</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">营业中门店</div>
+        <div class="stat-value">103</div>
+        <div class="stat-note">今日可接预约门店</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">支持配送</div>
+        <div class="stat-value">46</div>
+        <div class="stat-note">支持商品配送或上门服务</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">待审核门店</div>
+        <div class="stat-value">7</div>
+        <div class="stat-note">资料未补齐或待总部确认</div>
+      </article>
+    </section>
+
+    <section class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>门店检索与筛选</h2>
+          <p>支持按城市、门店状态、服务模式和关键词快速定位目标门店。</p>
+        </div>
+        <div class="toolbar">
+          <input type="text" value="搜索门店名称 / 联系电话 / 负责人" />
+          <select><option>全部城市</option><option>深圳</option><option>广州</option><option>佛山</option></select>
+          <select><option>全部状态</option><option>营业中</option><option>休息中</option><option>已停用</option></select>
+          <select><option>全部服务模式</option><option>自提</option><option>配送</option><option>自提+配送</option></select>
+          <button class="action-primary">新增门店</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="split">
+      <div class="table-card">
+        <div class="card-head">
+          <h2>门店列表</h2>
+          <span class="helper-text">共 128 家门店，当前展示 6 条示例数据</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>门店信息</th>
+              <th>城市 / 商圈</th>
+              <th>服务模式</th>
+              <th>营业时间</th>
+              <th>已绑商品</th>
+              <th>预约承接</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="table-meta">
+                  <span class="table-main">蓝辉轻改 · 深圳南山店</span>
+                  <span class="table-sub">店长：周雯 · 0755-88889999</span>
+                </div>
+              </td>
+              <td>深圳 · 科技园</td>
+              <td><span class="badge">自提+配送</span></td>
+              <td>08:00 - 18:30</td>
+              <td>286 个</td>
+              <td>今日 24 单</td>
+              <td><span class="badge success">营业中</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">商品配置</a><a href="#">预约记录</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">蓝辉轻改 · 广州天河店</span><span class="table-sub">店长：林嘉敏 · 020-77886655</span></div></td>
+              <td>广州 · 珠江新城</td>
+              <td><span class="badge">自提</span></td>
+              <td>09:00 - 20:00</td>
+              <td>214 个</td>
+              <td>今日 17 单</td>
+              <td><span class="badge success">营业中</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">商品配置</a><a href="#">预约记录</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">蓝辉轻改 · 佛山顺德店</span><span class="table-sub">店长：冯博 · 0757-66554433</span></div></td>
+              <td>佛山 · 大良</td>
+              <td><span class="badge">自提+配送</span></td>
+              <td>08:30 - 18:00</td>
+              <td>176 个</td>
+              <td>今日 9 单</td>
+              <td><span class="badge info">待审核</span></td>
+              <td><div class="op-links"><a href="#">补资料</a><a href="#">商品配置</a><a href="#">查看原因</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">蓝辉轻改 · 东莞南城店</span><span class="table-sub">店长：黄珂 · 0769-11223344</span></div></td>
+              <td>东莞 · 鸿福路</td>
+              <td><span class="badge">配送</span></td>
+              <td>10:00 - 19:00</td>
+              <td>88 个</td>
+              <td>今日 5 单</td>
+              <td><span class="badge success">营业中</span></td>
+              <td><div class="op-links"><a href="#">编辑</a><a href="#">覆盖范围</a><a href="#">预约记录</a></div></td>
+            </tr>
+            <tr>
+              <td><div class="table-meta"><span class="table-main">蓝辉轻改 · 珠海香洲店</span><span class="table-sub">店长：张骁 · 0756-22334455</span></div></td>
+              <td>珠海 · 香洲</td>
+              <td><span class="badge">自提</span></td>
+              <td>09:00 - 18:30</td>
+              <td>124 个</td>
+              <td>今日 4 单</td>
+              <td><span class="badge warn">暂停营业</span></td>
+              <td><div class="op-links"><a href="#">查看原因</a><a href="#">编辑</a><a href="#">恢复营业</a></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="aside-card">
+        <h3>当前选中门店</h3>
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>深圳南山店</strong>
+            距用户热门区域 0.8km，支持问界 / 智界 / 享界系列，预约承接量最高。
+          </div>
+          <div class="mini-item">
+            <strong>服务能力清单</strong>
+            可做玻璃膜、座舱舒适升级、后排娱乐、底盘防护、门板氛围改装。
+          </div>
+          <div class="mini-item">
+            <strong>门店运营提醒</strong>
+            本周新增 3 个套餐已待同步到门店商品页；配送时段需要补充节假日说明。
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+</body>
+</html>
