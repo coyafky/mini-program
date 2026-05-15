@@ -1,1 +1,49 @@
 $theme-color: #d8a04a;
+
+/* ========================
+   Design Tokens — 蓝辉轻改
+   ======================== */
+
+/* 颜色 */
+$color-primary: #D8A04A;
+$color-primary-dark: #8B6914;
+$color-bg-card: #FAF7F2;
+$color-text-primary: #2C2C2C;
+$color-text-secondary: #666666;
+$color-text-muted: #999999;
+$color-border: #E8E8E8;
+$color-skeleton: #F0F0F0;
+$color-skeleton-shine: #FAFAFA;
+$color-surface: #FFFFFF;
+$color-bg: #F5F5F3;
+$color-accent-hot: #F04D2D;
+
+/* 间距 */
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 20px;
+$space-2xl: 24px;
+
+/* 圆角 */
+$radius-sm: 12px;
+$radius-md: 16px;
+$radius-lg: 22px;
+$radius-card: 14px;
+
+/* 阴影 */
+$shadow-card: 0 2px 12px rgba(0,0,0,0.08);
+$shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
+
+/* 字号 */
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-md: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-price: 20px;
+
+/* 行高 */
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;

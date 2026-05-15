@@ -1,5 +1,6 @@
 <template>
   <view class="home-page">
+    <!-- 顶部搜索栏 -->
     <view class="top-shell">
       <view class="search-bar" @click="goCategory()">
         <text class="search-icon">⌕</text>
@@ -7,6 +8,7 @@
       </view>
     </view>
 
+    <!-- Banner 轮播 -->
     <swiper class="hero-banner" :indicator-dots="true" :autoplay="true" :interval="3500" :duration="500">
       <swiper-item v-for="(banner, index) in banners" :key="index">
         <view class="banner-card" :style="{ background: banner.color || defaultBannerColor }">
@@ -20,7 +22,83 @@
       </swiper-item>
     </swiper>
 
-    <view class="series-strip">
+    <!-- ========================
+         Tab 切换区域
+         ======================== -->
+    <view class="tab-bar-wrap">
+      <scroll-view class="tab-scroll" scroll-x enable-flex :scroll-left="scrollLeft" scroll-with-animation>
+        <view class="tab-list">
+          <view
+            v-for="tab in tabs"
+            :key="tab.key"
+            class="tab-item"
+            :class="{ active: currentTab === tab.key }"
+            @click="switchTab(tab.key)"
+          >
+            <text class="tab-label">{{ tab.name }}</text>
+          </view>
+          <!-- 滑块下划线 -->
+          <view class="tab-indicator" :style="indicatorStyle"></view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- ========================
+         Tab 内容区
+         ======================== -->
+    <view class="tab-content">
+      <!-- 加载态 -->
+      <block v-if="tabLoading">
+        <view class="skeleton-grid">
+          <view v-for="i in 4" :key="i" class="skeleton-card">
+            <view class="skeleton-image"></view>
+            <view class="skeleton-body">
+              <view class="skeleton-line" style="width: 80%"></view>
+              <view class="skeleton-line" style="width: 55%"></view>
+              <view class="skeleton-line short" style="width: 40%"></view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 空态 -->
+      <block v-else-if="currentContent.length === 0">
+        <view class="empty-state">
+          <text class="empty-icon">📭</text>
+          <text class="empty-text">暂无内容</text>
+          <text class="empty-sub">看看其他分类吧</text>
+        </view>
+      </block>
+
+      <!-- 内容 -->
+      <block v-else>
+        <view class="waterfall-grid">
+          <view
+            v-for="item in currentContent"
+            :key="`${item.type}-${item.id}`"
+            class="goods-card"
+            @click="handleCardClick(item)"
+          >
+            <view class="goods-visual" :class="item.type">
+              <text class="goods-corner">{{ item.type === 'package' ? '套餐' : item.type === 'case' ? '案例' : '商品' }}</text>
+              <view class="goods-brand">蓝辉轻改</view>
+              <image v-if="item.image" :src="item.image" mode="aspectFill" class="goods-image" @error="onImageError(item)" />
+              <view v-else class="goods-placeholder">
+                <text class="goods-placeholder-mark">{{ item.type === 'package' ? '套' : '品' }}</text>
+              </view>
+            </view>
+            <view class="goods-body">
+              <text class="goods-title">{{ item.name }}</text>
+              <text class="goods-brief">{{ item.brief }}</text>
+              <text class="goods-price">{{ item.priceLabel }}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 底部快捷入口（series strip — 保留在 tab 下方） -->
+    <view v-if="currentTab === 'recommend'" class="series-strip">
       <view
         v-for="(entry, index) in quickEntries"
         :key="entry.label"
@@ -29,37 +107,16 @@
         @click="goCategory(entry.category)"
       >
         <text class="series-title">{{ entry.label }}</text>
-        <text class="series-subtitle">{{ entry.badge }}</text>
+        <text v-if="entry.badge" class="series-subtitle">{{ entry.badge }}</text>
       </view>
     </view>
 
-    <view class="benefit-strip">
+    <!-- 热门车型横条（仅推荐 tab 显示） -->
+    <view v-if="currentTab === 'recommend'" class="benefit-strip">
       <text v-for="benefit in benefits" :key="benefit" class="benefit-item">{{ benefit }}</text>
     </view>
 
-    <view class="waterfall-grid">
-      <view
-        v-for="item in recommendationCards"
-        :key="`${item.type}-${item.id}`"
-        class="goods-card"
-        @click="goDetail(item.id, item.type)"
-      >
-        <view class="goods-visual" :class="item.type">
-          <text class="goods-corner">统一安装服务</text>
-          <view class="goods-brand">蓝辉轻改</view>
-          <image v-if="item.image" :src="item.image" mode="aspectFill" class="goods-image" />
-          <view v-else class="goods-placeholder">
-            <text class="goods-placeholder-mark">{{ item.type === 'package' ? '套' : '品' }}</text>
-          </view>
-        </view>
-        <view class="goods-body">
-          <text class="goods-title">{{ item.name }}</text>
-          <text class="goods-brief">{{ item.brief }}</text>
-          <text class="goods-price">{{ item.priceLabel }}</text>
-        </view>
-      </view>
-    </view>
-
+    <!-- 门店入口 -->
     <view class="store-tip" @click="goStore()">
       <view>
         <text class="store-tip-title">{{ currentStoreName || '选择门店后再提交预约单' }}</text>
@@ -73,18 +130,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { getHomeConfig } from '@/services/modules/home'
+import { getHomeConfig, getHomeTabContent } from '@/services/modules/home'
 import { firstImage, priceText } from '@/utils/format'
-import { getHomeRecommendations, homeBenefits, homeQuickEntries, mockPackages, mockProducts } from '@/utils/catalog'
-import type { HomeBanner, PackageItem, ProductItem } from '@/types/entities'
+import { homeBenefits, homeQuickEntries, mockProducts, mockPackages } from '@/utils/catalog'
+import type { HomeBanner } from '@/types/entities'
 
 const defaultBannerColor = 'linear-gradient(135deg, #861313 0%, #c62520 45%, #f16f36 100%)'
 
+// ========================
+// 状态
+// ========================
 const currentStoreName = ref('')
 const benefits = homeBenefits
 const quickEntries = homeQuickEntries
+
+// Banner
 const banners = ref<HomeBanner[]>([
   {
     text: '为美好车居生活而来',
@@ -97,44 +159,147 @@ const banners = ref<HomeBanner[]>([
     color: 'linear-gradient(135deg, #7c1212 0%, #ad1f1e 45%, #d6a05f 100%)',
   },
 ])
-const featuredProducts = ref<ProductItem[]>(mockProducts.slice(0, 4))
-const featuredPackages = ref<PackageItem[]>(mockPackages)
 
-const recommendationCards = computed(() => {
-  const products = featuredProducts.value.map((item) => ({
+// ========================
+// Tab 相关状态
+// ========================
+interface HomeTab {
+  key: string
+  name: string
+}
+
+const tabs = ref<HomeTab[]>([
+  { key: 'recommend', name: '推荐' },
+  { key: 'product', name: '商品' },
+  { key: 'package', name: '套餐' },
+  { key: 'case', name: '案例' },
+])
+
+type ContentItem = {
+  id: string
+  type: 'product' | 'package' | 'case'
+  name: string
+  brief: string
+  priceLabel: string
+  image?: string
+}
+
+const currentTab = ref('recommend')
+const tabLoading = ref(false)
+const tabContentMap = ref<Record<string, ContentItem[]>>({})
+const tabIndicatorPos = ref(0)
+const scrollLeft = ref(0)
+
+// Mock 数据按 tab key
+const mockTabData: Record<string, ContentItem[]> = {
+  recommend: [
+    ...mockProducts.slice(0, 2).map((item) => ({
+      id: item.id,
+      type: 'product' as const,
+      name: item.name,
+      brief: item.brief || item.description || '查看门店安装方案',
+      priceLabel: priceText(item.priceDescription),
+      image: firstImage(item.mainImages),
+    })),
+    ...mockPackages.map((item) => ({
+      id: item.id,
+      type: 'package' as const,
+      name: item.name,
+      brief: item.description || '查看套餐详情和组成',
+      priceLabel: item.price ? `¥${item.price.toLocaleString()}` : '到店咨询',
+      image: firstImage(item.mainImages),
+    })),
+  ],
+  product: mockProducts.map((item) => ({
     id: item.id,
     type: 'product' as const,
     name: item.name,
     brief: item.brief || item.description || '查看门店安装方案',
     priceLabel: priceText(item.priceDescription),
     image: firstImage(item.mainImages),
-  }))
-  const packages = featuredPackages.value.map((item) => ({
+  })),
+  package: mockPackages.map((item) => ({
     id: item.id,
     type: 'package' as const,
     name: item.name,
     brief: item.description || '查看套餐详情和组成',
-    priceLabel: priceText(item.price),
+    priceLabel: item.price ? `¥${item.price.toLocaleString()}` : '到店咨询',
     image: firstImage(item.mainImages),
-  }))
-  return [...products, ...packages]
+  })),
+  case: [],
+}
+
+const currentContent = computed(() => {
+  return tabContentMap.value[currentTab.value] || []
 })
+
+// Tab 下划线指示器样式
+const indicatorStyle = computed(() => {
+  const tabWidth = 72 // 每个 tab 宽度（px）
+  return {
+    width: `${tabWidth}px`,
+    transform: `translateX(${tabIndicatorPos.value}px)`,
+    transitionDuration: '0.3s',
+  }
+})
+
+// ========================
+// 方法
+// ========================
+function syncStore() {
+  currentStoreName.value = uni.getStorageSync('currentStoreName') || ''
+}
+
+async function loadTabContent(tabKey: string) {
+  if (tabContentMap.value[tabKey]) return // 已缓存
+
+  tabLoading.value = true
+  try {
+    const data = (await getHomeTabContent(tabKey)) as any
+    if (Array.isArray(data?.items) && data.items.length) {
+      tabContentMap.value[tabKey] = data.items
+    } else {
+      // API 无数据时降级到 mock
+      tabContentMap.value[tabKey] = mockTabData[tabKey] || []
+    }
+  } catch {
+    // 接口失败降级到 mock
+    tabContentMap.value[tabKey] = mockTabData[tabKey] || []
+  } finally {
+    tabLoading.value = false
+  }
+}
+
+function updateIndicator(index: number) {
+  const tabWidth = 72
+  tabIndicatorPos.value = index * tabWidth
+
+  // 滚动以保持当前 tab 可见
+  const screenWidth = uni.getSystemInfoSync().screenWidth || 375
+  const targetScrollLeft = Math.max(0, index * tabWidth - screenWidth / 2 + tabWidth / 2)
+  scrollLeft.value = targetScrollLeft
+}
+
+async function switchTab(tabKey: string) {
+  if (currentTab.value === tabKey) return
+  currentTab.value = tabKey
+  const index = tabs.value.findIndex((t) => t.key === tabKey)
+  updateIndicator(index)
+  await loadTabContent(tabKey)
+}
+
+function onImageError(item: ContentItem) {
+  // 图片加载失败时清掉 src，让占位图显示
+  item.image = undefined
+}
 
 async function loadHomeData() {
   try {
     const config = (await getHomeConfig()) as any
     if (Array.isArray(config?.banners) && config.banners.length) banners.value = config.banners
-    if (Array.isArray(config?.hotProducts) && config.hotProducts.length) featuredProducts.value = config.hotProducts
-    if (Array.isArray(config?.hotPackages) && config.hotPackages.length) featuredPackages.value = config.hotPackages
   } catch {
-    const fallback = getHomeRecommendations()
-    featuredProducts.value = fallback.filter((item): item is ProductItem => 'priceDescription' in item)
-    featuredPackages.value = fallback.filter((item): item is PackageItem => 'price' in item)
+    // 使用默认 banner
   }
-}
-
-function syncStore() {
-  currentStoreName.value = uni.getStorageSync('currentStoreName') || ''
 }
 
 function goCategory(category?: string) {
@@ -147,17 +312,35 @@ function goDetail(id: string, type: 'product' | 'package') {
   uni.navigateTo({ url: `/pages/product/detail?id=${id}&type=${type}` })
 }
 
+function handleCardClick(item: ContentItem) {
+  if (item.type === 'case') {
+    // 案例 tab: 一期暂无详情页，暂不跳转
+    return
+  }
+  goDetail(item.id, item.type)
+}
+
 function goStore() {
   uni.switchTab({ url: '/pages/store/index' })
 }
 
+// ========================
+// 生命周期
+// ========================
 onLoad(() => {
   syncStore()
   loadHomeData()
+  // 初始加载推荐 tab
+  loadTabContent('recommend')
 })
 
 onShow(() => {
   syncStore()
+})
+
+// 监听 tab 切换，切换内容时自动加载
+watch(currentTab, (key) => {
+  loadTabContent(key)
 })
 </script>
 
@@ -168,6 +351,7 @@ onShow(() => {
   padding-bottom: calc(28px + env(safe-area-inset-bottom));
 }
 
+/* ---- 搜索栏 ---- */
 .top-shell {
   padding: 12px 16px;
   background: #ffffff;
@@ -193,6 +377,7 @@ onShow(() => {
   font-size: 15px;
 }
 
+/* ---- Banner ---- */
 .hero-banner {
   height: 384px;
 }
@@ -257,60 +442,137 @@ onShow(() => {
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 }
 
-.series-strip {
-  padding: 10px 14px 0;
+/* ---- Tab 切换区 ---- */
+.tab-bar-wrap {
   background: #ffffff;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.series-item {
-  padding: 10px 2px 14px;
-  text-align: center;
+.tab-scroll {
+  white-space: nowrap;
 }
 
-.series-item.active .series-title {
-  color: #ff5b2c;
-}
-
-.series-item.active .series-subtitle {
+.tab-list {
   display: inline-flex;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #ff5b2c;
-  color: #ffffff;
+  position: relative;
+  padding: 0 8px;
 }
 
-.series-title {
-  display: block;
-  font-size: 13px;
+.tab-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tab-label {
+  font-size: 15px;
   font-weight: 600;
-  color: #333333;
+  color: #999999;
+  transition: color 0.25s;
+  position: relative;
+  z-index: 2;
 }
 
-.series-subtitle {
-  display: block;
-  margin-top: 8px;
-  font-size: 11px;
-  color: #b2b2b2;
+.tab-item.active .tab-label {
+  color: #2c2c2c;
+  font-weight: 700;
 }
 
-.benefit-strip {
-  margin: 12px 16px 0;
+/* 下划线滑块 */
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  height: 3px;
+  background: #d8a04a;
+  border-radius: 3px 3px 0 0;
+  z-index: 1;
+}
+
+/* ---- Tab 内容区 ---- */
+.tab-content {
+  min-height: 200px;
+  padding: 16px;
+}
+
+/* 骨架屏 */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 12px;
+}
+
+.skeleton-card {
+  border-radius: 22px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  height: 246px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-body {
+  padding: 14px;
   display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-.benefit-item {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #fff4e8;
-  color: #a96b29;
-  font-size: 11px;
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
+.skeleton-line.short {
+  height: 12px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 空态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 10px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #666666;
+}
+
+.empty-sub {
+  font-size: 13px;
+  color: #999999;
+}
+
+/* ---- 商品卡片网格 ---- */
 .waterfall-grid {
-  padding: 16px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 12px;
@@ -394,6 +656,10 @@ onShow(() => {
   font-size: 14px;
   line-height: 1.45;
   color: #222222;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .goods-brief {
@@ -402,6 +668,9 @@ onShow(() => {
   font-size: 11px;
   line-height: 1.45;
   color: #999999;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .goods-price {
@@ -412,8 +681,64 @@ onShow(() => {
   color: #f04d2d;
 }
 
+/* ---- 快捷入口 ---- */
+.series-strip {
+  padding: 10px 14px 0;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.series-item {
+  padding: 10px 2px 14px;
+  text-align: center;
+}
+
+.series-item.active .series-title {
+  color: #ff5b2c;
+}
+
+.series-item.active .series-subtitle {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ff5b2c;
+  color: #ffffff;
+}
+
+.series-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.series-subtitle {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #b2b2b2;
+}
+
+/* ---- 热门车型横条 ---- */
+.benefit-strip {
+  margin: 12px 16px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.benefit-item {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff4e8;
+  color: #a96b29;
+  font-size: 11px;
+}
+
+/* ---- 门店入口 ---- */
 .store-tip {
-  margin: 0 16px;
+  margin: 16px 16px 0;
   padding: 16px;
   border-radius: 20px;
   background: #ffffff;
