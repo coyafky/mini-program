@@ -222,12 +222,68 @@ model ReservationStatusLog {
   @@map("reservation_status_logs")
 }
 
-// ========== 首页配置 ==========
-model HomePageConfig {
-  id          String   @id @default(uuid())
-  configKey   String   @unique @map("config_key") @db.VarChar(50)
-  configValue String   @map("config_value") @db.Text
-  updatedAt   DateTime @updatedAt @map("updated_at")
+// ========== 首页 Banner ==========
+model Banner {
+  id        String    @id @default(uuid())
+  position  String    @db.VarChar(20) // TOP / MIDDLE
+  title     String?   @db.VarChar(100)
+  imageUrl  String    @map("image_url") @db.VarChar(500)
+  link      String?   @db.VarChar(500)
+  sort      Int       @default(0)
+  status    Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  @@map("home_page_configs")
+  @@map("banners")
+}
+
+// ========== 首页楼层 ==========
+model Floor {
+  id        String    @id @default(uuid())
+  title     String    @db.VarChar(100)
+  floorType String    @default("products") @map("floor_type") @db.VarChar(20) // products / feature
+  sort      Int       @default(0)
+  status    Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  tabs FloorTab[]
+
+  @@map("floors")
+}
+
+// ========== 楼层选块（Tab） ==========
+model FloorTab {
+  id         String    @id @default(uuid())
+  floorId    String    @map("floor_id")
+  name       String    @db.VarChar(100)
+  imageUrl   String?   @map("image_url") @db.VarChar(500)
+  targetType String    @default("") @map("target_type") @db.VarChar(20) // product / package / category / brand / url
+  targetId   String?   @map("target_id") @db.VarChar(100)
+  sort       Int       @default(0)
+  status     Int       @default(1)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  floor Floor          @relation(fields: [floorId], references: [id])
+  items FloorTabItem[]
+
+  @@map("floor_tabs")
+}
+
+// ========== 选块推荐项 ==========
+model FloorTabItem {
+  id         String   @id @default(uuid())
+  floorTabId String   @map("floor_tab_id")
+  itemType   String   @map("item_type") @db.VarChar(20) // product / package
+  itemId     String   @map("item_id")
+  sort       Int      @default(0)
+
+  floorTab FloorTab @relation(fields: [floorTabId], references: [id])
+
+  @@unique([floorTabId, itemType, itemId])
+  @@map("floor_tab_items")
 }
